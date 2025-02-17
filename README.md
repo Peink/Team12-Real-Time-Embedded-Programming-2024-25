@@ -6,8 +6,22 @@ Peining Liu (2615219L), Hao Zhang (3028132Z),
 Mengyang He (3030975H), Hao Sun (2955851S),  
 Chengyi Lyu (2960858L)  
 
-📂 **GitHub Repository**: [Team12-Real-Time-Embedded-Programming-2024-25](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25)  
-📸 **Instagram**: [uogrtep.t12.2025](https://www.instagram.com/uogrtep.t12.2025/)  
+
+  <img 
+    src="https://github.com/user-attachments/assets/1f0445d5-08b7-437e-8585-058f80ac4d8c" 
+    alt="Github" 
+    width="20"
+  />
+**GitHub**: [Team12-Real-Time-Embedded-Programming-2024-25](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25)  
+
+
+  <img 
+    src="https://github.com/user-attachments/assets/0add5f06-649c-413e-aa76-046fde2687fd" 
+    alt="Instagram" 
+    width="20"
+  />
+**Instagram**:[uogrtep.t12.2025](https://www.instagram.com/uogrtep.t12.2025/) 
+
 
 ---
 
