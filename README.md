@@ -1,5 +1,6 @@
 # Smart Lock System  
 ENG5220: Real Time Embedded Programming (2024-25) Group 12 Project
+
 **Team 12**:  
 Peining Liu (2615219L), Hao Zhang (3028132Z),  
 Mengyang He (3030975H), Hao Sun (2955851S),  
@@ -71,14 +72,14 @@ A multi-factor authentication smart lock system combining **facial recognition**
 - Open-source design for customization and scalability.  
 ---
 ## 🛠️ How It Works
-1. **Sensors collect data (like facical, fingerprint,etc)** via GPIO.
+1. Sensors collect data (like facical, fingerprint,etc) via GPIO.
 2. Judge the data is compare with the datas already inside the system, if it's match open lock.
 3. Event handlers perform multiple tasks:
    - **Display alert messages on screen**
    - **Trigger a buzzer alarm**
    - **Send alerts to LAN-connected client applications**
    - **Start live video surveillance (if enabled)**
-4. **Users can remotely monitor sensor readings and alerts via LAN-connected apps.**
-5. The system operates autonomously with **minimal latency** using a **multi-threaded architecture**.
+4. Users can remotely monitor sensor readings and alerts via LAN-connected apps.
+5. The system operates autonomously with minimal latency
 
 🌟 **Thank you for your interest!**  
