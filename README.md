@@ -44,7 +44,7 @@ A multi-factor authentication smart lock system combining **facial recognition**
 
 ### 📡 Remote Monitoring & Control  
 - Real-time data collection and time-stamped logging.  
-- Remote alarm system (buzzer integration, screen display, and the LAN uodates).  
+- Remote alarm system (buzzer integration, screen display, and the LAN updates).  
 - Motor control for automated locking/unlocking.  
 
 ### 🛠️ Hardware Design  
