@@ -96,5 +96,9 @@ A multi-factor authentication smart lock system combining **facial recognition**
    - **Start live video surveillance (if enabled)**
 4. Users can remotely monitor sensor readings and alerts via LAN-connected apps.
 5. The system operates autonomously with minimal latency
+---
+## 📦 The Structure of Project
+![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/main/Structure%20.svg)
 
 🌟 **Thank you for your interest!**  
+
