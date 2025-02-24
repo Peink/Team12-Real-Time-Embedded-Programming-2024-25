@@ -28,7 +28,7 @@ Chengyi Lyu (2960858L)
 ## 🚀 Project Overview  
 A multi-factor authentication smart lock system combining **facial recognition**, **fingerprint scanning**, and **password verification** for enhanced security. Integrated with remote monitoring, data logging, and real-time alarms, this system is designed for versatile applications in home, office, and industrial environments.  
 
-**Developed using:** C++, Raspberry Pi GPIO, LAN-based communication，etc.
+**Developed using:** C++, Raspberry Pi GPIO, LAN-based communication，[OpenCV](https://opencv.org), etc.
 
 ---
 
@@ -36,7 +36,7 @@ A multi-factor authentication smart lock system combining **facial recognition**
  
 ### 🔒 Authentication Methods  
 - **Facial Recognition**  
-  - Infrared distance camera module for accurate detection and monite remote environment.  
+  - Infrared distance camera module for accurate detection and monite remote environment.
 - **Fingerprint Lock**  
   - Fingerprint sensor module for biometric verification.  
 - **Password Lock**  
