@@ -2,9 +2,9 @@
 ENG5220: Real Time Embedded Programming (2024-25) Group 12 Project
 
 **Team 12**:  
-Peining Liu (2615219L), Hao Zhang (3028132Z),  
-Mengyang He (3030975H), Hao Sun (2955851S),  
-Chengyi Lyu (2960858L)  
+[Peining Liu (2615219L)](https://github.com/Peink), [Hao Zhang (3028132Z)](https://github.com/Hao2777-dot),  
+[Mengyang He (3030975H)](https://github.com/MengyangHe666), [Hao Sun (2955851S)](https://github.com/HaoSun-666),  
+[Chengyi Lyu (2960858L)](https://github.com/UOGLyucy)
 
 
   <img 
