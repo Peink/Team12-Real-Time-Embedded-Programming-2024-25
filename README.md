@@ -99,6 +99,13 @@ A multi-factor authentication smart lock system combining **facial recognition**
 ---
 ## 📦 The Structure of Project
 ![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/main/Structure%20.svg)
+---
+## ⌚️ The Project Plan
+
+<div align="center">
+<img alt="LOGO" src="Project Development Timeline.jpg"/>
+</div>  
+
 
 🌟 **Thank you for your interest!**  
 
