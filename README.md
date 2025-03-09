@@ -98,12 +98,12 @@ A multi-factor authentication smart lock system combining **facial recognition**
 5. The system operates autonomously with minimal latency
 ---
 ## 📦 The Structure of Project
-![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/main/Structure%20.svg)
+![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/Project-Document/Project%20Ducument/pic/Structure%20.svg)
 ---
 ## ⌚️ The Project Plan
 
 <div align="center">
-<img alt="LOGO" src="Project Development Timeline.jpg"/>
+<img alt="LOGO" src="https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/Project-Document/Project%20Ducument/pic/Project%20Development%20Timeline.jpg"/>
 </div>  
 
 
