@@ -28,7 +28,7 @@ class mutexSerialImpl {
 
  private:
   std::unordered_map<std::string, serialParam> serialmp_ = {
-      {"fingerPrint", {.port = "/dev/ttyUSB0", .baudrate = 115200}},
+      {"fingerPrint", {.port = "/dev/ttyAMA0", .baudrate = 115200}},
       {"ble", {.port = "/dev/ttyUSB1", .baudrate = 115200}},
   };
   std::vector<std::shared_ptr<serialInterface>> serialList_;
