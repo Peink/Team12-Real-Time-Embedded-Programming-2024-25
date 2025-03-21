@@ -7,6 +7,7 @@
 
 enum EventId {
   EVENT_NULL = 0,
+  DATA_RECEIVE_FINGER_DATA_EVENT,
 };
 
 typedef enum {

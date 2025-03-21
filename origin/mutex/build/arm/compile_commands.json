@@ -1,0 +1,122 @@
+[
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/cc -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/utils/utils.c.o -c /home/newcoder/project/mutex/modules/center/release/src/components/utils/utils.c",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/utils/utils.c"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/cc -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/utils/utils.crc.c.o -c /home/newcoder/project/mutex/modules/center/release/src/components/utils/utils.crc.c",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/utils/utils.crc.c"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/cc -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/utils/utils_crc8.c.o -c /home/newcoder/project/mutex/modules/center/release/src/components/utils/utils_crc8.c",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/utils/utils_crc8.c"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/mutex_common.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/mutex_common.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/mutex_common.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/mutex_loader.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/mutex_loader.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/mutex_loader.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/mutex_node.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/mutex_node.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/mutex_node.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/mutex_node_factory.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/mutex_node_factory.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/mutex_node_factory.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/mutex_node_mgr.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/mutex_node_mgr.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/mutex_node_mgr.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/periodTask.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/periodTask.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/periodTask.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/serial/serialInterface.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/serial/serialInterface.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/serial/serialInterface.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/components/serial/serialTermios.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/components/serial/serialTermios.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/components/serial/serialTermios.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/main.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/main.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/main.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_data_node/data_serial_impl.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_data_node/data_serial_impl.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_data_node/data_serial_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_data_node/mutex_data_impl.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_data_node/mutex_data_impl.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_data_node/mutex_data_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_data_node/mutex_data_node.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_data_node/mutex_data_node.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_data_node/mutex_data_node.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_task_node/mutex_task_impl.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/mutex_task_impl.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/mutex_task_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_task_node/mutex_task_node.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/mutex_task_node.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/mutex_task_node.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_task_node/task_component/AS608/as608.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/task_component/AS608/as608.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/task_component/AS608/as608.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_task_node/task_component/fingerlib.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/task_component/fingerlib.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_task_node/task_component/fingerlib.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_wifi_node/mutex_wifi_impl.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_wifi_node/mutex_wifi_impl.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_wifi_node/mutex_wifi_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/mutex_wifi_node/mutex_wifi_node.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/mutex_wifi_node/mutex_wifi_node.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/mutex_wifi_node/mutex_wifi_node.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/release",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/release -I/home/newcoder/project/mutex/modules/center/release/src -I/home/newcoder/project/mutex/modules/center/release/src/components -I/home/newcoder/project/mutex/include -I/home/newcoder/project/mutex/lib/3rd/arm/include -O3 -DNDEBUG   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex.dir/src/node_impl.cpp.o -c /home/newcoder/project/mutex/modules/center/release/src/node_impl.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/release/src/node_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/center/test",
+  "command": "/usr/bin/c++  -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/center/test -I/home/newcoder/project/mutex/modules/center/test/src -I/home/newcoder/project/mutex/lib/3rd/include -g   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/mutex_test.dir/src/main.cpp.o -c /home/newcoder/project/mutex/modules/center/test/src/main.cpp",
+  "file": "/home/newcoder/project/mutex/modules/center/test/src/main.cpp"
+},
+{
+  "directory": "/home/newcoder/project/mutex/build/arm/modules/serial/test",
+  "command": "/usr/bin/c++  -I/home/newcoder/project/mutex/lib/include -I/home/newcoder/project/mutex -I/home/newcoder/project/mutex/build/arm -I/home/newcoder/project/mutex/modules/serial/test -I/home/newcoder/project/mutex/modules/serial/test/src -I/home/newcoder/project/mutex/lib/3rd/include -g   -Wall -Wno-class-memaccess -Wall -o CMakeFiles/serial_test.dir/src/main.cpp.o -c /home/newcoder/project/mutex/modules/serial/test/src/main.cpp",
+  "file": "/home/newcoder/project/mutex/modules/serial/test/src/main.cpp"
+}
+]
