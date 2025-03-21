@@ -37,7 +37,7 @@ enum {
   WIFI_INTERFACE,
 };
 
-class esp_ble_gatts_cb_param_t {
+class mutex_cb_param_t {
  public:
   int dest;  //>数据的目的地
   int size;  //>数据大小
@@ -51,13 +51,20 @@ class esp_ble_gatts_cb_param_t {
   std::string uuid;  //>该消息的UUID
   // void (*finishCallback)(void* param);  //> 数据到达后的回调
 
-  esp_ble_gatts_cb_param_t() {
+  mutex_cb_param_t() {
     uuid = "";
     data = nullptr;
     param = nullptr;
   }
 
-  esp_ble_gatts_cb_param_t(const esp_ble_gatts_cb_param_t& other) {
+  mutex_cb_param_t(char* buf, int len) {
+    uuid = "";
+    data = buf;
+    size = len;
+    param = nullptr;
+  }
+
+  mutex_cb_param_t(const mutex_cb_param_t& other) {
     dest = other.dest;
     size = other.size;
     cmd = other.cmd;
@@ -67,7 +74,7 @@ class esp_ble_gatts_cb_param_t {
     uuid = other.uuid;
   }
 
-  esp_ble_gatts_cb_param_t(const esp_ble_gatts_cb_param_t* other) {
+  mutex_cb_param_t(const mutex_cb_param_t* other) {
     dest = other->dest;
     size = other->size;
     cmd = other->cmd;
@@ -77,7 +84,7 @@ class esp_ble_gatts_cb_param_t {
     uuid = other->uuid;
   }
 
-  esp_ble_gatts_cb_param_t& operator=(const esp_ble_gatts_cb_param_t& other) {
+  mutex_cb_param_t& operator=(const mutex_cb_param_t& other) {
     if (&other != this) {
       if (data != nullptr) free(data);
       data = nullptr;
@@ -92,7 +99,7 @@ class esp_ble_gatts_cb_param_t {
     return *this;
   }
 
-  ~esp_ble_gatts_cb_param_t() {
+  ~mutex_cb_param_t() {
     if (data != nullptr) {
       free(data);
       data = nullptr;
@@ -103,6 +110,25 @@ class esp_ble_gatts_cb_param_t {
 using eventHandler = std::function<void(void*)>;
 
 #define __EVENTHANDLER eventHandler
+
+#define __CREATE_MUTEX_CB_PARAM_T_(PARAM, BUF, SIZE)        \
+  do {                                                      \
+    char* eventData = nullptr;                              \
+    eventData = (char*)malloc(sizeof(char) * (SIZE));       \
+    memcpy(eventData, (BUF), (SIZE));                       \
+    (PARAM) = new lcy::mutex_cb_param_t(eventData, (SIZE)); \
+  } while (0)
+
+#define __DELETE_MUTEX_CB_PARAM_T_(PARAM) \
+  do {                                    \
+    if (param != nullptr) {               \
+      delete param;                       \
+    }                                     \
+    param = nullptr;                      \
+  } while (0)
+
+// namespace lcy
+
 }  // namespace lcy
 
 #endif

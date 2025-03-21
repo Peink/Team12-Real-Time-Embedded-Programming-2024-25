@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/serial_test.dir/src/main.cpp.o -o serial_test   -L/home/newcoder/project/mutex/lib  -L/home/newcoder/project/mutex/lib/3rd/lib  -L/home/newcoder/project/mutex/lib/product/lib 
