@@ -6,7 +6,7 @@
 
 #define RX_LEN 2048
 #define TX_LEN 2048
-u32 AS608Addr = 0XFFFFFFFF;  // setting
+u32 AS608Addr = 0XFFFFFFFF;  // default address
 char str2[6] = {0};
 
 /// @brief ///
@@ -19,41 +19,48 @@ static fingerEventInterFace *fingerEventInterFace_ = nullptr;
 
 fingerEventInterFace::fingerEventInterFace() { fingerEventInterFace_ = this; }
 
-// send a bite to the serial
+// Send one byte over serial port
 static void MYUSART_SendData(u8 data) {
   // while((USART3->SR & 0X40) == 0);
   // USART3->DR = data;
   USART_TX_BUF[0] = data;
   fingerEventInterFace_->UartSendData_(USART_TX_BUF, 1);
 }
-// send to frame header
+
+// Send packet header
 static void SendHead(void) {
   MYUSART_SendData(0xEF);
   MYUSART_SendData(0x01);
 }
-// send address
+
+// Send module address
 static void SendAddr(void) {
   MYUSART_SendData(AS608Addr >> 24);
   MYUSART_SendData(AS608Addr >> 16);
   MYUSART_SendData(AS608Addr >> 8);
   MYUSART_SendData(AS608Addr);
 }
-// send Packet Identifier
+
+// Send packet flag
 static void SendFlag(u8 flag) { MYUSART_SendData(flag); }
-// send frame header length
+
+// Send packet length
 static void SendLength(int length) {
   MYUSART_SendData(length >> 8);
   MYUSART_SendData(length);
 }
-// send command code 
+
+// Send command code
 static void Sendcmd(u8 cmd) { MYUSART_SendData(cmd); }
-// send checksum
+
+// Send checksum
 static void SendCheck(u16 check) {
   MYUSART_SendData(check >> 8);
   MYUSART_SendData(check);
 }
-// Determine whether the interrupt-received buffer has a response packet
-// waittime is the time to wait for data reception (in ms)
+
+// Check if response packet is received from serial interrupt buffer
+// waittime: timeout in milliseconds
 // Return value: pointer to packet start address
 static u8 *JudgeStr(u16 waittime) {
   char *data;
@@ -69,7 +76,7 @@ static u8 *JudgeStr(u16 waittime) {
   // USART_RX_STA = 0;
   while (--waittime) {
     usleep(1000);
-    // if(USART_RX_STA & 0X8000) //Receiving once data
+    // if(USART_RX_STA & 0X8000) // data received
     // {
     // USART_RX_STA = 0;
     if (USART_RX_STA == 1) {
@@ -82,6 +89,7 @@ static u8 *JudgeStr(u16 waittime) {
   return 0;
 }
 
+// Callback function for handling serial events
 void fingerEventInterFace::hasEvent(
     dataFingerImpl::serial_with_params_event &e) {
   switch (e.event_type) {
@@ -97,15 +105,16 @@ void fingerEventInterFace::hasEvent(
   }
 }
 
-// Enroll fingerprint image PS_GetImage
-// Function: Detect if finger is pressed, and save fingerprint image to ImageBuffer
-// Return confirmation code from moduleu8 fingerEventInterFace::PS_GetImage(void) {
+// PS_GetImage: capture fingerprint image
+// Function: Detect if finger is placed and capture fingerprint image to ImageBuffer.
+// Returns confirmation code from module
+u8 fingerEventInterFace::PS_GetImage(void) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command Packet Identifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x03);
   Sendcmd(0x01);
   temp = 0x01 + 0x03 + 0x01;
@@ -117,17 +126,18 @@ void fingerEventInterFace::hasEvent(
     ensure = 0xff;
   return ensure;
 }
-// Generate fingerprint feature PS_GenChar
-// Function: Convert image in ImageBuffer into feature file, store in CharBuffer1 or CharBuffer2
-// Param: BufferID ¡ú CharBuffer1: 0x01 or CharBuffer2: 0x02
-// Return confirmation code
+
+// PS_GenChar: generate feature from captured image
+// Function: Convert raw image in ImageBuffer into fingerprint feature and store in CharBuffer1 or CharBuffer2
+// Parameter: BufferID --> CharBuffer1: 0x01, CharBuffer2: 0x02
+// Returns confirmation code from module
 u8 fingerEventInterFace::PS_GenChar(u8 BufferID) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command packet identifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x04);
   Sendcmd(0x02);
   MYUSART_SendData(BufferID);
@@ -140,16 +150,17 @@ u8 fingerEventInterFace::PS_GenChar(u8 BufferID) {
     ensure = 0xff;
   return ensure;
 }
-// Match two fingerprint features PS_Match
-// Function: Precisely compare features in CharBuffer1 and CharBuffer2
-// Return confirmation code
+
+// PS_Match: match two fingerprint features
+// Function: Compare feature data in CharBuffer1 and CharBuffer2 for a match
+// Returns confirmation code
 u8 fingerEventInterFace::PS_Match(void) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command indentifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x03);
   Sendcmd(0x03);
   temp = 0x01 + 0x03 + 0x03;
@@ -161,9 +172,11 @@ u8 fingerEventInterFace::PS_Match(void) {
     ensure = 0xff;
   return ensure;
 }
-// Search fingerprint PS_Search
-// Function: Search the fingerprint library using features from CharBuffer1 or CharBuffer2
-// Return: confirmation code and matched page ID if found
+
+// PS_Search: search fingerprint template
+// Function: Search entire or partial database using feature in CharBuffer1 or CharBuffer2. Returns match page ID if found.
+// Parameter: BufferID (CharBuffer1/2), StartPage, PageNum, SearchResult* p
+// Returns confirmation code and match result (pageID, match score)
 u8 fingerEventInterFace::PS_Search(u8 BufferID, u16 StartPage, u16 PageNum,
                                    SearchResult *p) {
   u16 temp;
@@ -171,7 +184,7 @@ u8 fingerEventInterFace::PS_Search(u8 BufferID, u16 StartPage, u16 PageNum,
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x08);
   Sendcmd(0x04);
   MYUSART_SendData(BufferID);
@@ -191,16 +204,17 @@ u8 fingerEventInterFace::PS_Search(u8 BufferID, u16 StartPage, u16 PageNum,
     ensure = 0xff;
   return ensure;
 }
-// Merge fingerprint features into template PS_RegModel
-// Function: Merge features in CharBuffer1 and CharBuffer2 into a template
-// Return confirmation code
+// Merge features to generate fingerprint template - PS_RegModel
+// Function: Merge fingerprint features in CharBuffer1 and CharBuffer2
+// The result is stored in both CharBuffer1 and CharBuffer2
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_RegModel(void) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x03);
   Sendcmd(0x05);
   temp = 0x01 + 0x03 + 0x05;
@@ -212,17 +226,19 @@ u8 fingerEventInterFace::PS_RegModel(void) {
     ensure = 0xff;
   return ensure;
 }
-// Store template PS_StoreChar
-// Function: Store template from CharBuffer1 or CharBuffer2 into flash at PageID
-// Param: BufferID and PageID
-// Return confirmation code
+
+// Store template - PS_StoreChar
+// Function: Store the template in CharBuffer1 or CharBuffer2 into the specified flash PageID
+// Parameters: BufferID @ref CharBuffer1: 0x01, CharBuffer2: 0x02
+//             PageID: template location index in fingerprint library
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_StoreChar(u8 BufferID, u16 PageID) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x06);
   Sendcmd(0x06);
   MYUSART_SendData(BufferID);
@@ -237,16 +253,18 @@ u8 fingerEventInterFace::PS_StoreChar(u8 BufferID, u16 PageID) {
     ensure = 0xff;
   return ensure;
 }
-// Delete template PS_DeletChar
-// Function: Delete N templates starting from PageID
-// Return confirmation code
+
+// Delete template - PS_DeletChar
+// Function: Delete N fingerprint templates starting from PageID in flash database
+// Parameters: PageID - template start index; N - number of templates to delete
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_DeletChar(u16 PageID, u16 N) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x07);
   Sendcmd(0x0C);
   MYUSART_SendData(PageID >> 8);
@@ -262,16 +280,18 @@ u8 fingerEventInterFace::PS_DeletChar(u16 PageID, u16 N) {
     ensure = 0xff;
   return ensure;
 }
-// Clear fingerprint database PS_Empty
-// Function: Delete all fingerprint templates from flash
-// Return confirmation code
+
+// Clear fingerprint database - PS_Empty
+// Function: Delete all fingerprint templates in flash database
+// Parameters: None
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_Empty(void) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x03);
   Sendcmd(0x0D);
   temp = 0x01 + 0x03 + 0x0D;
@@ -283,17 +303,18 @@ u8 fingerEventInterFace::PS_Empty(void) {
     ensure = 0xff;
   return ensure;
 }
-// Write system register PS_WriteReg
-// Function: Write module register
-// Param: RegNum: 4/5/6
-// Return confirmation code
+
+// Write system register - PS_WriteReg
+// Function: Write to module's system register
+// Parameters: RegNum - register number (4/5/6), DATA - value to write
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_WriteReg(u8 RegNum, u8 DATA) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x05);
   Sendcmd(0x0E);
   MYUSART_SendData(RegNum);
@@ -306,21 +327,23 @@ u8 fingerEventInterFace::PS_WriteReg(u8 RegNum, u8 DATA) {
   else
     ensure = 0xff;
   if (ensure == 0)
-    printf("\r\n setting successful£¡");
+    printf("\r\nSet parameter success!");
   else
     printf("\r\n%s", EnsureMessage(ensure));
   return ensure;
 }
-// Read system parameters PS_ReadSysPara
-// Function: Read module¡¯s basic parameters (baud rate, packet size, etc.)
-// Return confirmation code and 16 bytes of system info
+
+// Read system basic parameters - PS_ReadSysPara
+// Function: Read basic parameters from the module (baud rate, package size, etc.)
+// Parameters: None
+// Return: confirmation code + parameter content (16 bytes)
 u8 fingerEventInterFace::PS_ReadSysPara(SysPara *p) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x03);
   Sendcmd(0x0F);
   temp = 0x01 + 0x03 + 0x0F;
@@ -337,25 +360,26 @@ u8 fingerEventInterFace::PS_ReadSysPara(SysPara *p) {
   } else
     ensure = 0xff;
   if (ensure == 0x00) {
-    printf("\r\n  maximum volumm of the finger module=%d", p->PS_max);
-    printf("\r\n  comparing levels=%d", p->PS_level);
-    printf("\r\n address=%x", p->PS_addr);
-    printf("\r\n bord rate=%d", p->PS_N * 9600);
+    printf("\r\nMax fingerprint capacity = %d", p->PS_max);
+    printf("\r\nMatch level = %d", p->PS_level);
+    printf("\r\nAddress = %x", p->PS_addr);
+    printf("\r\nBaud rate = %d", p->PS_N * 9600);
   } else
     printf("\r\n%s", EnsureMessage(ensure));
   return ensure;
 }
-// Set module address PS_SetAddr
-// Function: Set fingerprint module address
-// Param: PS_addr
-// Return confirmation code
+
+// Set module address - PS_SetAddr
+// Function: Set the address of the fingerprint module
+// Parameters: PS_addr - target address
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_SetAddr(u32 PS_addr) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(0x07);
   Sendcmd(0x15);
   MYUSART_SendData(PS_addr >> 24);
@@ -365,7 +389,7 @@ u8 fingerEventInterFace::PS_SetAddr(u32 PS_addr) {
   temp = 0x01 + 0x07 + 0x15 + (u8)(PS_addr >> 24) + (u8)(PS_addr >> 16) +
          (u8)(PS_addr >> 8) + (u8)PS_addr;
   SendCheck(temp);
-  AS608Addr = PS_addr;  // sendig command finished, change address
+  AS608Addr = PS_addr;  // Update address after command sent
   data = JudgeStr(2000);
   if (data)
     ensure = data[9];
@@ -373,22 +397,24 @@ u8 fingerEventInterFace::PS_SetAddr(u32 PS_addr) {
     ensure = 0xff;
   AS608Addr = PS_addr;
   if (ensure == 0x00)
-    printf("\r\n address setting successful£¡");
+    printf("\r\nSet address success!");
   else
     printf("\r\n%s", EnsureMessage(ensure));
   return ensure;
 }
-// PS_WriteNotepad
-// Function: Write 32 bytes of data into 1 of 16 user note pages (total 256 bytes flash)
-// Param: Page number (0~15), Byte32 (32 bytes of data)
-// Return confirmation code
+
+// PS_WriteNotepad: Write to user notepad (flash memory)
+// Function: The module provides 256 bytes of flash memory for user notes,
+// logically divided into 16 pages
+// Parameters: NotePageNum (0~15), Byte32 (32 bytes of content to write)
+// Return: confirmation code from the module
 u8 fingerEventInterFace::PS_WriteNotepad(u8 NotePageNum, u8 *Byte32) {
   u16 temp;
   u8 ensure, i;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet identifier
   SendLength(36);
   Sendcmd(0x18);
   MYUSART_SendData(NotePageNum);
@@ -405,17 +431,17 @@ u8 fingerEventInterFace::PS_WriteNotepad(u8 NotePageNum, u8 *Byte32) {
     ensure = 0xff;
   return ensure;
 }
-// Read notepad PS_ReadNotepad
-// Function: Read 32 bytes of user data from specified notepad page
-// Param: NotePageNum (0~15)
-// Return confirmation code and user data
+// Read notepad - PS_ReadNotepad
+// Function: Read 128 bytes of user data from the FLASH notepad area
+// Parameter: NotePageNum (0~15)
+// Return: confirmation code + user data
 u8 fingerEventInterFace::PS_ReadNotepad(u8 NotePageNum, u8 *Byte32) {
   u16 temp;
   u8 ensure, i;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x04);
   Sendcmd(0x19);
   MYUSART_SendData(NotePageNum);
@@ -431,11 +457,13 @@ u8 fingerEventInterFace::PS_ReadNotepad(u8 NotePageNum, u8 *Byte32) {
     ensure = 0xff;
   return ensure;
 }
-// High-speed search PS_HighSpeedSearch
-// Function: Search entire fingerprint library quickly using CharBuffer1/2
-// Return confirmation code and matched page ID
-// BufferID£¬
-// StartPage£¬PageNum illustrate:  module retern confirm bite+Page num£¨matching finger module £©
+
+// High-speed search - PS_HighSpeedSearch
+// Function: Use features in CharBuffer1 or CharBuffer2 to quickly search the fingerprint library.
+// If a match is found, returns the matched page ID. This command is effective when the fingerprint
+// is well registered in the library.
+// Parameters: BufferID, StartPage, PageNum
+// Return: confirmation code + match page ID
 u8 fingerEventInterFace::PS_HighSpeedSearch(u8 BufferID, u16 StartPage,
                                             u16 PageNum, SearchResult *p) {
   u16 temp;
@@ -443,7 +471,7 @@ u8 fingerEventInterFace::PS_HighSpeedSearch(u8 BufferID, u16 StartPage,
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x08);
   Sendcmd(0x1b);
   MYUSART_SendData(BufferID);
@@ -463,16 +491,18 @@ u8 fingerEventInterFace::PS_HighSpeedSearch(u8 BufferID, u16 StartPage,
     ensure = 0xff;
   return ensure;
 }
-// Read number of valid templates PS_ValidTempleteNum
-// Function: Get number of valid fingerprint templates
-// Return confirmation code and number of valid templates
+
+// Read number of valid fingerprint templates - PS_ValidTempleteNum
+// Function: Read the number of valid fingerprint templates
+// Parameter: None
+// Return: confirmation code + number of valid templates (ValidN)
 u8 fingerEventInterFace::PS_ValidTempleteNum(u16 *ValidN) {
   u16 temp;
   u8 ensure;
   u8 *data;
   SendHead();
   SendAddr();
-  SendFlag(0x01);  // command identifier
+  SendFlag(0x01);  // command packet flag
   SendLength(0x03);
   Sendcmd(0x1d);
   temp = 0x01 + 0x03 + 0x1d;
@@ -485,14 +515,15 @@ u8 fingerEventInterFace::PS_ValidTempleteNum(u16 *ValidN) {
     ensure = 0xff;
 
   if (ensure == 0x00) {
-    printf("\r\n numbers of valid finger prints=%d", (data[10] << 8) + data[11]);
+    printf("\r\nValid fingerprint count = %d", (data[10] << 8) + data[11]);
   } else
     printf("\r\n%s", EnsureMessage(ensure));
   return ensure;
 }
-// Handshake with AS608 PS_HandShake
-// Param: pointer to PS_Addr
-// Return: confirmed address
+
+// Handshake with AS608 - PS_HandShake
+// Parameter: PS_Addr (pointer to address)
+// Description: The module returns its current (correct) address
 u8 fingerEventInterFace::PS_HandShake(u32 *PS_Addr) {
   SendHead();
   SendAddr();
@@ -500,101 +531,99 @@ u8 fingerEventInterFace::PS_HandShake(u32 *PS_Addr) {
   MYUSART_SendData(0X00);
   MYUSART_SendData(0X00);
   usleep(200 * 1000);
-  // if(USART_RX_STA & 0X8000) //receiving data
-  // {
+  // if (USART_RX_STA & 0X8000) // data received
   if (USART_RX_STA == 1) {
     USART_RX_STA = 0;
-    if (  // identify if it is the correct responding packet
-        USART_RX_BUF[0] == 0XEF && USART_RX_BUF[1] == 0X01 &&
+    // Check if this is a response packet from the module
+    if (USART_RX_BUF[0] == 0XEF && USART_RX_BUF[1] == 0X01 &&
         USART_RX_BUF[6] == 0X07) {
       *PS_Addr = (USART_RX_BUF[2] << 24) + (USART_RX_BUF[3] << 16) +
                  (USART_RX_BUF[4] << 8) + (USART_RX_BUF[5]);
-      // USART_RX_STA = 0;
       return 0;
     }
   }
-  // USART_RX_STA = 0;
-  // }
   return 1;
 }
-// Parse confirmation code PS_EnsureMessage
-// Function: Return human-readable error message based on confirmation code
+
+// Parse response confirmation code - EnsureMessage
+// Function: Translate confirmation code to readable error message
+// Parameter: ensure
 const char *fingerEventInterFace::EnsureMessage(u8 ensure) {
   const char *p;
   switch (ensure) {
     case 0x00:
-      p = "       OK       ";
+      p = "OK";
       break;
     case 0x01:
-      p = " erros of data sending package ";
+      p = "data package receive error";
       break;
     case 0x02:
-      p = "no finger on the sensor";
+      p = "no finger";
       break;
     case 0x03:
-      p = "finger print wrong";
+      p = "store finger failed";
       break;
     case 0x04:
-      p = " finger too dry or too wet ";
+      p = "finger is too shallow or dry";
       break;
     case 0x05:
-      p = " finger too wet or not clear ";
+      p = "finger is too deep or moist";
       break;
     case 0x06:
-      p = "  finger too mess  ";
+      p = "finger image is too chaos";
       break;
     case 0x07:
-      p = " finger characters not clear ";
+      p = "There are too few fingerprint features";
       break;
     case 0x08:
-      p = "  finger not match    ";
+      p = "Fingerprints don't match";
       break;
     case 0x09:
-      p = " no finger searched ";
+      p = "No fingerprints were found";
       break;
     case 0x0a:
-      p = "   failed finger combine ";
+      p = "Feature merge failed";
       break;
     case 0x0b:
-      p = "adress numbers beyonded";
+      p = "The address number is out of range";
+      break;
     case 0x10:
-      p = "  failed deleted module  ";
+      p = "Failed to delete the template";
       break;
     case 0x11:
-      p = " failed clear finger print data ";
+      p = "Failed to clear the fingerprint database";
       break;
     case 0x15:
-      p = "no valid pictures in saturated part";
+      p = "There is no valid map in the buffer";
       break;
     case 0x18:
-      p = " FLASH wrong  ";
+      p = "Error reading and writing FLASH";
       break;
     case 0x19:
-      p = "   no identified wrong   ";
+      p = "Undefined errors";
       break;
     case 0x1a:
-      p = "  invalid storage  ";
+      p = "Invalid register number";
       break;
     case 0x1b:
-      p = " storage content wrong ";
+      p = "The contents of the register are incorrect";
       break;
     case 0x1c:
-      p = " page of note wrong ";
+      p = "Notepad page numbering is incorrect";
       break;
     case 0x1f:
-      p = "    full finger print data    ";
+      p = "The fingerprint bank is full";
       break;
     case 0x20:
-      p = "    wrong address    ";
+      p = "The address is incorrect";
       break;
     default:
-      p = " wrong return confirm ";
+      p = "The return confirmation code is incorrect";
       break;
   }
   return p;
 }
-
-//Display error message
+// Display confirmation code error message
 void fingerEventInterFace::ShowErrMessage(u8 ensure) {
   printf("show ensure message : %d\r\n", ensure);
 }
@@ -607,12 +636,14 @@ void fingerEventInterFace::Add_FR(void) {
     switch (processnum) {
       case 0:
         i++;
+        printf("please press finger\r\n");
         ensure = PS_GetImage();
         if (ensure == 0x00) {
-          ensure = PS_GenChar(CharBuffer1);  // create feature
+          ensure = PS_GenChar(CharBuffer1);  // Generate feature
           if (ensure == 0x00) {
+            printf("finger is right\r\n");
             i = 0;
-            processnum = 1;  // jump into second step
+            processnum = 1;  // Proceed to step 2
           } else
             ShowErrMessage(ensure);
         } else
@@ -621,16 +652,14 @@ void fingerEventInterFace::Add_FR(void) {
 
       case 1:
         i++;
-        // OLED_ShowCH(0, 2, "   try agian   ");
-        // OLED_ShowCH(0, 4, "                ");
+        printf("please press again\r\n");
         ensure = PS_GetImage();
         if (ensure == 0x00) {
-          ensure = PS_GenChar(CharBuffer2);  // create feature
+          ensure = PS_GenChar(CharBuffer2);  // Generate second feature
           if (ensure == 0x00) {
-            // OLED_ShowCH(0, 2, "    normal finger print    ");
-            // OLED_ShowCH(0, 4, "                ");
+            printf("finger is right, second\r\n");
             i = 0;
-            processnum = 2;  // jump into step three
+            processnum = 2;  // Proceed to step 3
           } else
             ShowErrMessage(ensure);
         } else
@@ -638,32 +667,27 @@ void fingerEventInterFace::Add_FR(void) {
         break;
 
       case 2:
-        // OLED_ShowCH(0, 2, "  compare two finger print  ");
-        // OLED_ShowCH(0, 4, "                ");
+        printf("compare two finger\r\n");
         ensure = PS_Match();
         if (ensure == 0x00) {
-          // OLED_ShowCH(0, 2, "    match successful    ");
-          // OLED_ShowCH(0, 4, "                ");
-          processnum = 3;  // jump into step four
+          printf("compare success\r\n");
+          processnum = 3;  // Proceed to step 4
         } else {
-          // OLED_ShowCH(0, 2, "    wrong match    ");
-          // OLED_ShowCH(0, 4, "                ");
+          printf("compare failed\r\n");
           ShowErrMessage(ensure);
           i = 0;
-          processnum = 0;  // return to step one
+          processnum = 0;  // Go back to step 1
         }
         usleep(500 * 1000);
         break;
 
       case 3:
-        // OLED_ShowCH(0, 2, "  create finger module  ");
-        // OLED_ShowCH(0, 4, "                ");
+        printf("generate finger template ...\r\n");
         usleep(500 * 1000);
         ensure = PS_RegModel();
         if (ensure == 0x00) {
-          // OLED_ShowCH(0, 2, "create finger module successful");
-          // OLED_ShowCH(0, 4, "                ");
-          processnum = 4;  // jump to step five
+          printf("generate finger template success\r\n");
+          processnum = 4;  // Proceed to step 5
         } else {
           processnum = 0;
           ShowErrMessage(ensure);
@@ -672,9 +696,9 @@ void fingerEventInterFace::Add_FR(void) {
         break;
 
       case 4:
-        // OLED_ShowCH(0, 0, " pressK4plus,pressK2minus ");
-        // OLED_ShowCH(0, 2, "    pressK3reserve    ");
-        // OLED_ShowCH(0, 4, "  0=< ID <=99   ");
+        // OLED_ShowCH(0, 0, " Press K4 to increase, K2 to decrease ");
+        // OLED_ShowCH(0, 2, "    Press K3 to save    ");
+        // OLED_ShowCH(0, 4, "  0 <= ID <= 99   ");
         while (key_num != 3) {
           // key_num = KEY_Scan(0);
           if (key_num == 2) {
@@ -689,17 +713,11 @@ void fingerEventInterFace::Add_FR(void) {
           // OLED_ShowNum(65, 6, ID_NUM, 2, 1);
         }
         key_num = 0;
-        ensure = PS_StoreChar(CharBuffer2, ID_NUM);  // storage module
+        ensure = PS_StoreChar(CharBuffer2, ID_NUM);  // Store template
         if (ensure == 0x00) {
-          // OLED_Clear();
-          // OLED_ShowCH(0, 2, "  finger print successful  ");
-          // OLED_ShowCH(0, 4, "                ");
+          printf("Add finger success\r\n");
           usleep(1500 * 1000);
-          // OLED_Clear();
-          // OLED_ShowCH(0, 0, "finger print module test");
-          // OLED_ShowCH(16, 2, "K1 add finger");
-          // OLED_ShowCH(16, 4, "K3 delete finger");
-          // OLED_ShowCH(16, 6, "K5 identify finger");
+          showMenu();
           return;
         } else {
           // OLED_Clear();
@@ -709,14 +727,14 @@ void fingerEventInterFace::Add_FR(void) {
         break;
     }
     usleep(400 * 1000);
-    if (i == 10)  // beyond5times no finger then exit
+    if (i == 10)  // Exit if finger not pressed after 5 attempts
     {
       break;
     }
   }
 }
 
-// new finger
+// Verify fingerprint
 void fingerEventInterFace::press_FR(void) {
   SearchResult seach;
   u8 ensure;
@@ -724,43 +742,40 @@ void fingerEventInterFace::press_FR(void) {
   while (key_num != 1) {
     // key_num = KEY_Scan(0);
     ensure = PS_GetImage();
-    if (ensure == 0x00)  // capture figure successful
+    if (ensure == 0x00)  // Successfully captured image
     {
       ensure = PS_GenChar(CharBuffer1);
-      if (ensure == 0x00)  // create feature successful
+      if (ensure == 0x00)  // Successfully generated feature
       {
         ensure = PS_HighSpeedSearch(CharBuffer1, 0, 99, &seach);
-        if (ensure == 0x00)  // searching successful
+        if (ensure == 0x00)  // Successfully found match
         {
-          // OLED_ShowCH(0, 2, "  finger print successful  ");
-          sprintf(str, " ID:%d score :%d ", seach.pageID, seach.mathscore);
-          // OLED_ShowCH(0, 4, (u8 *)str);
+          printf("verification success\r\n");
+          sprintf(str, " ID:%d score:%d ", seach.pageID, seach.mathscore);
+          printf("%s\r\n", str);
           usleep(1500 * 1000);
           usleep(1500 * 1000);
         } else {
-          // OLED_ShowCH(32, 2, "failed identify");
+          printf("verification failed\r\n");
           usleep(1500 * 1000);
         }
       } else {
       };
       // OLED_Clear();
-      // OLED_ShowCH(32, 2, "press finger");
+      // OLED_ShowCH(32, 2, "please press finger");
+      printf("please press finger\r\n");
     }
   }
-  // OLED_Clear();
-  // OLED_ShowCH(0, 0, "finger print test");
-  // OLED_ShowCH(16, 2, "K1 add finger");
-  // OLED_ShowCH(16, 4, "K3 delete finger");
-  // OLED_ShowCH(16, 6, "K5 identify finger");
+  showMenu();
 }
 
-// delete finger
+// Delete fingerprint
 void fingerEventInterFace::Del_FR(void) {
   u8 ensure;
   u16 ID_NUM = 0;
-  // OLED_ShowCH(0, 0, "K4plus K2minus K3confirm");
-  // OLED_ShowCH(0, 2, "  K5clear finger database  ");
-  // OLED_ShowCH(0, 4, "K1return 0=<ID<=99");
+  // OLED_ShowCH(0, 0, "K4 +  K2 -  K3 Confirm");
+  // OLED_ShowCH(0, 2, "  K5 Clear all  ");
+  // OLED_ShowCH(0, 4, "K1 Back  0 <= ID <= 99");
   while (key_num != 3) {
     // key_num = KEY_Scan(0);
     if (key_num == 2) {
@@ -771,33 +786,37 @@ void fingerEventInterFace::Del_FR(void) {
       key_num = 0;
       if (ID_NUM < 99) ID_NUM++;
     }
-    if (key_num == 1) goto MENU;  // return to home
+    if (key_num == 1) goto MENU;  // Return to main menu
     if (key_num == 5) {
       key_num = 0;
-      ensure = PS_Empty();  // clear finger database
+      ensure = PS_Empty();  // Clear fingerprint database
       if (ensure == 0) {
         // OLED_Clear();
-        // OLED_ShowCH(0, 2, " clear finger data successful ");
+        // OLED_ShowCH(0, 2, " Clear success ");
       } else
         ShowErrMessage(ensure);
       usleep(1500 * 1000);
-      goto MENU;  // return to homepage
+      goto MENU;  // Return to main menu
     }
     // OLED_ShowCH(40, 6, "ID=");
     // OLED_ShowNum(65, 6, ID_NUM, 2, 1);
   }
-  ensure = PS_DeletChar(ID_NUM, 1);  // delete single print
+  ensure = PS_DeletChar(ID_NUM, 1);  // Delete single fingerprint
   if (ensure == 0) {
     // OLED_Clear();
-    // OLED_ShowCH(0, 2, "  delete successful  ");
+    // OLED_ShowCH(0, 2, " Delete success ");
   } else
     ShowErrMessage(ensure);
   usleep(1500 * 1000);
 MENU:
-  // OLED_Clear();
-  // OLED_ShowCH(0, 0, "finger print module successful");
-  // OLED_ShowCH(16, 2, "K1add finger");
-  // OLED_ShowCH(16, 4, "K3delet finger");
-  // OLED_ShowCH(16, 6, "K5indetify finger");
+  showMenu();
   key_num = 0;
+}
+
+// Display function menu
+void fingerEventInterFace::showMenu() {
+  printf("===========================================\r\n");
+  printf("14 : verification finger\r\n");
+  printf("15 : delete finger \r\n");
+  printf("16 : add finger \r\n");
 }
