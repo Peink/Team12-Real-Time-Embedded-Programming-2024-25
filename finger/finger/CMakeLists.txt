@@ -54,4 +54,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         # COMMAND ${STRIP_CMD} $<TARGET_FILE:${PROJECT_NAME}>
         COMMAND ${CMAKE_COMMAND} --build . --target install
         COMMENT "Installing and stripping ${PROJECT_NAME}"
-        )
