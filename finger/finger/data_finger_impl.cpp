@@ -3,6 +3,10 @@
 #include "fingerlib/finger.hpp"
 #include "serialTermios.hpp"
 
+#define ADD_NUM 16
+#define DELETE_NUM 15
+#define VERIFICATION_NUM 14
+
 static dataFingerImpl* this_ = nullptr;
 
 static fingerEventInterFace fingerPrint_;
@@ -41,6 +45,25 @@ void dataFingerImpl::onInit() {
   serialDataCheckThread_->detach();
 }
 
+void dataFingerImpl::hasEventCallback(lcy::mutex_event_with_param& e) {
+  switch (e.event_type) {
+    case KEY_PRESS_EVENT: {
+      if (e.param == nullptr) {
+        return;
+      } else {
+        int press_num = *(static_cast<int*>(e.param));
+        printf("finger receive press num : %d\r\n", press_num);
+        if (press_num == ADD_NUM) {
+          fingerPrint_.Add_FR();
+        }
+      }
+    } break;
+
+    default:
+      break;
+  }
+}
+
 void dataFingerImpl::serialDataCheckRun_() {
   while (serialDataCheckFlag_) {
     if (!serialList_.empty()) {
@@ -65,4 +88,3 @@ void dataFingerImpl::serialEvent(serial_with_params_event& e) {
   for (auto& cb : adsCallbackInterfaces) {
     cb->hasEvent(e);
   }
-}
