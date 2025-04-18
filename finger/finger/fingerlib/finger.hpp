@@ -16,16 +16,16 @@ class fingerEventInterFace
     : public dataFingerImpl::SerialEventCallbackInterface {
  public:
   typedef struct {
-    u16 pageID;     // Finger ID
+    u16 pageID;     // Fingerprint ID
     u16 mathscore;  // Matching score
   } SearchResult;
 
   typedef struct {
-    u16 PS_max;   // maximum finger print volumm
-    u8 PS_level;  // security level
-    u32 PS_addr;
-    u8 PS_size;  // capacity of communication data packet
-    u8 PS_N;     // Baud rate N
+    u16 PS_max;   // Maximum fingerprint capacity
+    u8 PS_level;  // Security level
+    u32 PS_addr;  // Module address
+    u8 PS_size;   // Data packet size
+    u8 PS_N;      // Baud rate base N
   } SysPara;
 
   fingerEventInterFace();
@@ -33,11 +33,9 @@ class fingerEventInterFace
 
   void hasEvent(dataFingerImpl::serial_with_params_event &e) override;
 
-  void Add_FR(void);
-
-  void press_FR(void);
-
-  void Del_FR(void);
+  void Add_FR(void);       // Add fingerprint
+  void press_FR(void);     // Verify fingerprint
+  void Del_FR(void);       // Delete fingerprint
 
   void setUARTSendData(void (*UartSendData)(const char *, uint16_t)) {
     UartSendData_ = UartSendData;
@@ -46,43 +44,46 @@ class fingerEventInterFace
   void (*UartSendData_)(const char *data, uint16_t data_len) = nullptr;
 
  private:
-  u8 PS_GetImage(void);  // recording figure
+  void showMenu();  // Display command menu
 
-  u8 PS_GenChar(u8 BufferID);  // create feature
+  u8 PS_GetImage(void);  // Capture fingerprint image
 
-  u8 PS_Match(void);  // compare the finger feature
+  u8 PS_GenChar(u8 BufferID);  // Generate fingerprint feature
+
+  u8 PS_Match(void);  // Match two fingerprint features
 
   u8 PS_Search(u8 BufferID, u16 StartPage, u16 PageNum,
-               SearchResult *p);  // searching finger
+               SearchResult *p);  // Search fingerprint
 
-  u8 PS_RegModel(void);  // combine feature£¨create module£©
+  u8 PS_RegModel(void);  // Merge fingerprint features (generate template)
 
-  u8 PS_StoreChar(u8 BufferID, u16 PageID);  // storage module
+  u8 PS_StoreChar(u8 BufferID, u16 PageID);  // Store fingerprint template
 
-  u8 PS_DeletChar(u16 PageID, u16 N);  // delete module
+  u8 PS_DeletChar(u16 PageID, u16 N);  // Delete fingerprint template
 
-  u8 PS_Empty(void);  // clear database
+  u8 PS_Empty(void);  // Clear fingerprint database
 
-  u8 PS_WriteReg(u8 RegNum, u8 DATA);  // write in system storage
+  u8 PS_WriteReg(u8 RegNum, u8 DATA);  // Write system register
 
-  u8 PS_ReadSysPara(SysPara *p);  // read system parameters
+  u8 PS_ReadSysPara(SysPara *p);  // Read system parameters
 
-  u8 PS_SetAddr(u32 addr);  // setting module address
+  u8 PS_SetAddr(u32 addr);  // Set module address
 
-  u8 PS_WriteNotepad(u8 NotePageNum, u8 *content);  // write into note
+  u8 PS_WriteNotepad(u8 NotePageNum, u8 *content);  // Write to notepad memory
 
-  u8 PS_ReadNotepad(u8 NotePageNum, u8 *note);  // read note
+  u8 PS_ReadNotepad(u8 NotePageNum, u8 *note);  // Read from notepad memory
 
   u8 PS_HighSpeedSearch(u8 BufferID, u16 StartPage, u16 PageNum,
-                        SearchResult *p);  // high speed search
+                        SearchResult *p);  // High-speed fingerprint search
 
-  u8 PS_ValidTempleteNum(u16 *ValidN);  // read valid module
+  u8 PS_ValidTempleteNum(u16 *ValidN);  // Get number of valid templates
 
-  u8 PS_HandShake(u32 *PS_Addr);  // Shake hands with AS608 module
+  u8 PS_HandShake(u32 *PS_Addr);  // Handshake with AS608 module
 
-  const char *EnsureMessage(u8 ensure);  // confirm wrong data resolve
+  const char *EnsureMessage(u8 ensure);  // Interpret confirmation code
 
-  void ShowErrMessage(u8 ensure);
+  void ShowErrMessage(u8 ensure);  // Display error message
 };
 
 #endif
+
