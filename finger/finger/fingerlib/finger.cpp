@@ -4,6 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <fstream>
+#include <iostream>
+
 #define RX_LEN 2048
 #define TX_LEN 2048
 u32 AS608Addr = 0XFFFFFFFF;  // default address
@@ -17,9 +20,21 @@ static char USART_TX_BUF[1] = {0};
 
 static fingerEventInterFace *fingerEventInterFace_ = nullptr;
 
-fingerEventInterFace::fingerEventInterFace() { fingerEventInterFace_ = this; }
+fingerEventInterFace::fingerEventInterFace() {
+  fingerEventInterFace_ = this;
+  char finger_num_file_path[2048] = {0};
+  memset(finger_num_file_path, 0, 2048);
+  snprintf(finger_num_file_path, 2048, "%s%s", HOME_PREFIX,
+           FINGER_NUM_FILE_NAME);
+  std::ifstream finger_num_file = std::ifstream(finger_num_file_path);
+  if (!finger_num_file.is_open()) {
+    printf("no finger num\r\n");
+  } else {
+    finger_num_file.read((char *)&finger_num, sizeof(u8));
+  }
+}
 
-// Send one byte over serial port
+// Send packet header
 static void MYUSART_SendData(u8 data) {
   // while((USART3->SR & 0X40) == 0);
   // USART3->DR = data;
@@ -27,24 +42,22 @@ static void MYUSART_SendData(u8 data) {
   fingerEventInterFace_->UartSendData_(USART_TX_BUF, 1);
 }
 
-// Send packet header
+// Send module address
 static void SendHead(void) {
   MYUSART_SendData(0xEF);
   MYUSART_SendData(0x01);
 }
 
-// Send module address
+// Send packet flag
 static void SendAddr(void) {
   MYUSART_SendData(AS608Addr >> 24);
   MYUSART_SendData(AS608Addr >> 16);
   MYUSART_SendData(AS608Addr >> 8);
   MYUSART_SendData(AS608Addr);
-}
-
-// Send packet flag
-static void SendFlag(u8 flag) { MYUSART_SendData(flag); }
 
 // Send packet length
+static void SendFlag(u8 flag) { MYUSART_SendData(flag); }
+
 static void SendLength(int length) {
   MYUSART_SendData(length >> 8);
   MYUSART_SendData(length);
@@ -102,6 +115,14 @@ void fingerEventInterFace::hasEvent(
 
     default:
       break;
+  }
+}
+
+void fingerEventInterFace::deviceCheck(void) {
+  u8 data[16] = {0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00,
+                 0x07, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1b};
+  for (int i = 0; i < 16; i++) {
+    MYUSART_SendData(data[i]);
   }
 }
 
@@ -629,17 +650,24 @@ void fingerEventInterFace::ShowErrMessage(u8 ensure) {
 }
 
 // Add fingerprint
-void fingerEventInterFace::Add_FR(void) {
+bool fingerEventInterFace::Add_FR(void) {
   u8 i, ensure, processnum = 0;
   u8 ID_NUM = 0;
   while (1) {
     switch (processnum) {
       case 0:
+      {
         i++;
         printf("please press finger\r\n");
+        int result = system("aplay /home/team12/audio/10.wav");
+        if (result == 0) {
+          // std::cout << "Script executed successfully." << std::endl;
+        } else {
+          std::cerr << "Script execution failed with code: " << result << std::endl;
+        }
         ensure = PS_GetImage();
         if (ensure == 0x00) {
-          ensure = PS_GenChar(CharBuffer1);  // Generate feature
+          ensure = PS_GenChar(CharBuffer1); // Generate feature
           if (ensure == 0x00) {
             printf("finger is right\r\n");
             i = 0;
@@ -651,11 +679,19 @@ void fingerEventInterFace::Add_FR(void) {
         break;
 
       case 1:
+       case 1:
+      {
         i++;
         printf("please press again\r\n");
+        int result = system("aplay /home/team12/audio/10.wav");
+        if (result == 0) {
+          // std::cout << "Script executed successfully." << std::endl;
+        } else {
+          std::cerr << "Script execution failed with code: " << result << std::endl;
+        }
         ensure = PS_GetImage();
         if (ensure == 0x00) {
-          ensure = PS_GenChar(CharBuffer2);  // Generate second feature
+          ensure = PS_GenChar(CharBuffer2); // Generate second feature
           if (ensure == 0x00) {
             printf("finger is right, second\r\n");
             i = 0;
@@ -664,24 +700,26 @@ void fingerEventInterFace::Add_FR(void) {
             ShowErrMessage(ensure);
         } else
           ShowErrMessage(ensure);
-        break;
+        }  break;
 
       case 2:
+         {
         printf("compare two finger\r\n");
         ensure = PS_Match();
         if (ensure == 0x00) {
           printf("compare success\r\n");
-          processnum = 3;  // Proceed to step 4
+          processnum = 3; // Proceed to step 4
         } else {
           printf("compare failed\r\n");
           ShowErrMessage(ensure);
           i = 0;
           processnum = 0;  // Go back to step 1
-        }
+          }
         usleep(500 * 1000);
-        break;
+        }  break;
 
       case 3:
+          {
         printf("generate finger template ...\r\n");
         usleep(500 * 1000);
         ensure = PS_RegModel();
@@ -693,38 +731,35 @@ void fingerEventInterFace::Add_FR(void) {
           ShowErrMessage(ensure);
         }
         usleep(1000 * 1000);
-        break;
+        }  break;
 
       case 4:
+     {
         // OLED_ShowCH(0, 0, " Press K4 to increase, K2 to decrease ");
         // OLED_ShowCH(0, 2, "    Press K3 to save    ");
         // OLED_ShowCH(0, 4, "  0 <= ID <= 99   ");
-        while (key_num != 3) {
-          // key_num = KEY_Scan(0);
-          if (key_num == 2) {
-            key_num = 0;
-            if (ID_NUM > 0) ID_NUM--;
-          }
-          if (key_num == 4) {
-            key_num = 0;
-            if (ID_NUM < 99) ID_NUM++;
-          }
-          // OLED_ShowCH(40, 6, "ID=");
-          // OLED_ShowNum(65, 6, ID_NUM, 2, 1);
-        }
-        key_num = 0;
-        ensure = PS_StoreChar(CharBuffer2, ID_NUM);  // Store template
-        if (ensure == 0x00) {
+       finger_num++;
+       ensure = PS_StoreChar(CharBuffer2, finger_num); (CharBuffer2, ID_NUM);  // Store template
+       if (ensure == 0x00) {
           printf("Add finger success\r\n");
+          char finger_num_file_path[2048] = {0};
+          memset(finger_num_file_path, 0, 2048);
+          snprintf(finger_num_file_path, 2048, "%s%s", HOME_PREFIX,
+                   FINGER_NUM_FILE_NAME);
+          std::ofstream finger_num_file = std::ofstream(finger_num_file_path);
+          if (!finger_num_file.is_open()) {
+            printf("no finger num write\r\n");
+          } else {
+            finger_num_file.write((char *)&finger_num, sizeof(u8));
+          }
           usleep(1500 * 1000);
           showMenu();
-          return;
+          return true;
         } else {
-          // OLED_Clear();
           processnum = 0;
           ShowErrMessage(ensure);
         }
-        break;
+      } break;
     }
     usleep(400 * 1000);
     if (i == 10)  // Exit if finger not pressed after 5 attempts
@@ -732,88 +767,64 @@ void fingerEventInterFace::Add_FR(void) {
       break;
     }
   }
+  return false;
 }
 
 // Verify fingerprint
-void fingerEventInterFace::press_FR(void) {
+bool fingerEventInterFace::press_FR(void) {
   SearchResult seach;
   u8 ensure;
+  u8 i;
   char str[20];
-  while (key_num != 1) {
-    // key_num = KEY_Scan(0);
+  int result = system("aplay /home/team12/audio/10.wav");
+  if (result == 0) {
+    // std::cout << "Script executed successfully." << std::endl;
+  } else {
+    std::cerr << "Script execution failed with code: " << result << std::endl;
+  }
+  while (1) {
     ensure = PS_GetImage();
     if (ensure == 0x00)  // Successfully captured image
-    {
-      ensure = PS_GenChar(CharBuffer1);
-      if (ensure == 0x00)  // Successfully generated feature
-      {
-        ensure = PS_HighSpeedSearch(CharBuffer1, 0, 99, &seach);
-        if (ensure == 0x00)  // Successfully found match
-        {
+  {
           printf("verification success\r\n");
           sprintf(str, " ID:%d score:%d ", seach.pageID, seach.mathscore);
           printf("%s\r\n", str);
           usleep(1500 * 1000);
           usleep(1500 * 1000);
+          return true;
         } else {
           printf("verification failed\r\n");
           usleep(1500 * 1000);
         }
       } else {
-      };
-      // OLED_Clear();
-      // OLED_ShowCH(32, 2, "please press finger");
-      printf("please press finger\r\n");
+        ShowErrMessage(ensure);
+      }
     }
+    usleep(500 * 1000);
+    i++;
+    if (i > 10) break;
   }
   showMenu();
+  return false;
 }
+
 
 // Delete fingerprint
-void fingerEventInterFace::Del_FR(void) {
+bool fingerEventInterFace::Del_FR(void) {
   u8 ensure;
   u16 ID_NUM = 0;
-  // OLED_ShowCH(0, 0, "K4 +  K2 -  K3 Confirm");
-  // OLED_ShowCH(0, 2, "  K5 Clear all  ");
-  // OLED_ShowCH(0, 4, "K1 Back  0 <= ID <= 99");
-  while (key_num != 3) {
-    // key_num = KEY_Scan(0);
-    if (key_num == 2) {
-      key_num = 0;
-      if (ID_NUM > 0) ID_NUM--;
-    }
-    if (key_num == 4) {
-      key_num = 0;
-      if (ID_NUM < 99) ID_NUM++;
-    }
-    if (key_num == 1) goto MENU;  // Return to main menu
-    if (key_num == 5) {
-      key_num = 0;
-      ensure = PS_Empty();  // Clear fingerprint database
-      if (ensure == 0) {
-        // OLED_Clear();
-        // OLED_ShowCH(0, 2, " Clear success ");
-      } else
-        ShowErrMessage(ensure);
-      usleep(1500 * 1000);
-      goto MENU;  // Return to main menu
-    }
-    // OLED_ShowCH(40, 6, "ID=");
-    // OLED_ShowNum(65, 6, ID_NUM, 2, 1);
-  }
-  ensure = PS_DeletChar(ID_NUM, 1);  // Delete single fingerprint
+  ensure = PS_Empty();  // Return to main menu
+ usleep(1500 * 1000);
   if (ensure == 0) {
-    // OLED_Clear();
-    // OLED_ShowCH(0, 2, " Delete success ");
-  } else
+    printf("delete finger success\r\n");
+    return true;
+  } else {
     ShowErrMessage(ensure);
-  usleep(1500 * 1000);
-MENU:
-  showMenu();
-  key_num = 0;
+    printf("delete finger false\r\n");
+    return false;
+  }
 }
 
-// Display function menu
 void fingerEventInterFace::showMenu() {
   printf("===========================================\r\n");
   printf("14 : verification finger\r\n");
