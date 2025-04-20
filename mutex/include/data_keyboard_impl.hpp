@@ -5,7 +5,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <fstream>
+#include <iostream>
 #include <memory>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -25,13 +28,13 @@
 #define R3_NUM 23
 #define R4_NUM 24
 
+#define CONFIRM_NUM 10
+#define CANCEL_NUM 11
+#define MODIFY_NUM 12
+
 #define CHIP_NAME "gpiochip0"
 
-typedef struct {
-  unsigned int line_num;
-  struct gpiod_line *line;
-  int val;
-} gpio_t;
+#define PASSWORD_PATH "/home/newcoder/project/mutex/password.txt"
 
 typedef struct {
   int last_num;
@@ -47,10 +50,12 @@ typedef struct {
   gpio_check_t *gpio_check_;
 } event_param_keyboard;
 
-typedef struct {
-  gpiod_line_event event;
-  void *params;
-} event_with_params;
+enum {
+  VERIFY = 0,
+  MODIFY = 1,
+  NEW_INPUT = 2,
+  CHECK_NEW_INPUT = 3,
+};
 
 class dataKeyBoardImpl : public lcy::mutexNode {
  public:
@@ -60,7 +65,28 @@ class dataKeyBoardImpl : public lcy::mutexNode {
   dataKeyBoardImpl(lcy::mutexNode *node) : node_(node) {}
 
   void onInit() override;
+  void hasEventCallback(lcy::mutex_event_with_param &e) override;
   void start();
+
+  typedef struct {
+    gpiod_line_event event;
+    void *params;
+  } keyboard_event_with_params;
+
+  class keyBoardEventCallbackInterface {
+    /**
+     * Called when a new sample is available.
+     * This needs to be implemented in a derived
+     * class by the client. Defined as abstract.
+     * \param e If serial receive data
+     **/
+   public:
+    virtual void hasEvent(keyboard_event_with_params &e) = 0;
+  };
+
+  void registerCallback(keyBoardEventCallbackInterface *ci) {
+    adsCallbackInterfaces.push_back(ci);
+  }
 
  private:
   gpio_check_t row;
@@ -90,11 +116,34 @@ class dataKeyBoardImpl : public lcy::mutexNode {
   void startListen(gpiod_chip *chip, gpio_t *gpio_, gpio_check_t *gpio_check_);
   void releaseGpioSrc();
 
-  void keyBoardScanCallback(event_with_params &event);
+  std::vector<keyBoardEventCallbackInterface *> adsCallbackInterfaces;
+
+  void keyBoardEvent(keyboard_event_with_params &e);
 
   lcy::mutexNode *node_;
   bool checkKeyBoardRunFlag_ = true;
   std::shared_ptr<std::thread> keyBoardCheckThread_;
+
+  std::vector<int> password_vec;
+
+  std::vector<int> password_save;
+
+  std::vector<int> password_new;
+
+  std::vector<int> password_new_again;
+
+  int modify_password_flag = 0;
+
+  void password_clear();
+};
+
+class keyBoardEventInterFace
+    : public dataKeyBoardImpl::keyBoardEventCallbackInterface {
+ public:
+  keyBoardEventInterFace();
+  ~keyBoardEventInterFace() = default;
+
+  void hasEvent(dataKeyBoardImpl::keyboard_event_with_params &e) override;
 };
 
 #endif

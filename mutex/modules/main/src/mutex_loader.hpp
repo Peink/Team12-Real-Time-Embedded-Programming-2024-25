@@ -16,7 +16,7 @@ class mutexLoader {
   void run();
 
  private:
-  std::unordered_map<std::string, std::unique_ptr<mutexNode>> node_objs_;
+  std::vector<std::shared_ptr<mutexNode>> node_objs_;
   void createNode();
 };
 

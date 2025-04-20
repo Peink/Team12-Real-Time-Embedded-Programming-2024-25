@@ -10,7 +10,7 @@
 
 namespace lcy {
 
-std::vector<std::string> node_list = {"keyBoard", "serial"};
+std::vector<std::string> node_list = {"finger", "keyBoard", "echo"};
 
 mutexLoader::mutexLoader() {}
 
@@ -22,6 +22,8 @@ void mutexLoader::createNode() {
     if (node) {
       printf("create success \r\n");
       node->onInit();
+      node_objs_.push_back(node);
+      node->setNodeCallbackInterfaceList(&node_objs_);
     }
   }
 }

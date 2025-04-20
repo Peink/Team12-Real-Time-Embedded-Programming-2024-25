@@ -20,6 +20,7 @@ class dataFingerImpl : public lcy::mutexNode {
   char readBuf_[READ_BUF_LEN] = {0};
 
   void onInit() override;
+  void hasEventCallback(lcy::mutex_event_with_param& e) override;
 
   typedef struct {
     std::string port;
@@ -55,7 +56,7 @@ class dataFingerImpl : public lcy::mutexNode {
  private:
   std::unordered_map<std::string, serialParam> serialmp_ = {
       {"fingerEventInterFacePrint",
-       {.port = "/dev/ttyAMA0", .baudrate = 115200}},
+       {.port = "/dev/ttyAMA0", .baudrate = 57600}},
   };
   std::shared_ptr<std::thread> serialDataCheckThread_;
   void serialDataCheckRun_();

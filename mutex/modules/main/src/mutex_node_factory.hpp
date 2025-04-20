@@ -6,7 +6,7 @@
 namespace lcy {
 class mutexNode;
 namespace mutexNodeFactory {
-std::unique_ptr<mutexNode> createNode(const char* name);
+std::shared_ptr<mutexNode> createNode(const char* name);
 };
 }  // namespace lcy
 

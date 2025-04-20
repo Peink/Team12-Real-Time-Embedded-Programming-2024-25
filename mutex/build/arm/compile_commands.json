@@ -1,0 +1,57 @@
+[
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/echo",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -Decho_EXPORTS -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/echo -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g -fPIC   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/echo.dir/data_echo_impl.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/echo/data_echo_impl.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/echo/data_echo_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/finger",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -Dfinger_EXPORTS -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/finger -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g -fPIC   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/finger.dir/data_finger_impl.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/finger/data_finger_impl.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/finger/data_finger_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/finger",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -Dfinger_EXPORTS -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/finger -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g -fPIC   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/finger.dir/fingerlib/finger.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/finger/fingerlib/finger.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/finger/fingerlib/finger.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/keyBoard",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -DkeyBoard_EXPORTS -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/keyBoard -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g -fPIC   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/keyBoard.dir/data_keyboard_impl.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/keyBoard/data_keyboard_impl.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/keyBoard/data_keyboard_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/main",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/main -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/mutex.dir/src/main.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/main/src/main.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/main/src/main.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/main",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/main -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/mutex.dir/src/mutex_loader.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/main/src/mutex_loader.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/main/src/mutex_loader.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/main",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/main -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/mutex.dir/src/mutex_node.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/main/src/mutex_node.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/main/src/mutex_node.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/main",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/main -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/mutex.dir/src/mutex_node_factory.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/main/src/mutex_node_factory.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/main/src/mutex_node_factory.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/main",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/main -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/mutex.dir/src/node_impl.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/main/src/node_impl.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/main/src/node_impl.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/serial",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -Dserial_EXPORTS -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/serial -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g -fPIC   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/serial.dir/serialInterface.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/serial/serialInterface.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/serial/serialInterface.cpp"
+},
+{
+  "directory": "/home/newcoder/embedded-project-door-lock/mutex/build/arm/modules/serial",
+  "command": "/usr/bin/c++ -DSPDLOG_FMT_EXTERNAL -Dserial_EXPORTS -I/home/newcoder/embedded-project-door-lock/mutex/lib/include -I/home/newcoder/embedded-project-door-lock/mutex -I/home/newcoder/embedded-project-door-lock/mutex/build/arm -I/home/newcoder/embedded-project-door-lock/mutex/modules/serial -I/home/newcoder/embedded-project-door-lock/mutex/include -g -g -fPIC   -Wall -Wno-class-memaccess -Wall -std=gnu++17 -o CMakeFiles/serial.dir/serialTermios.cpp.o -c /home/newcoder/embedded-project-door-lock/mutex/modules/serial/serialTermios.cpp",
+  "file": "/home/newcoder/embedded-project-door-lock/mutex/modules/serial/serialTermios.cpp"
+}
+]
