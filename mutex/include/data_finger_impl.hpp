@@ -56,7 +56,7 @@ class dataFingerImpl : public lcy::mutexNode {
  private:
   std::unordered_map<std::string, serialParam> serialmp_ = {
       {"fingerEventInterFacePrint",
-       {.port = "/dev/ttyAMA0", .baudrate = 57600}},
+       {.port = "/dev/ttyUSB0", .baudrate = 57600}},
   };
   std::shared_ptr<std::thread> serialDataCheckThread_;
   void serialDataCheckRun_();
