@@ -6,6 +6,7 @@ static uint8_t distance = 0;
 static dataEchoImpl *dataEchoImpl_ = nullptr;
 static bool echo_trig_flag = false;
 static bool echo_end_flag = false;
+static uint16_t distance_count = 0 //add the uint16 because the single echo may has false alarm
 
 dataEchoImpl::dataEchoImpl() { dataEchoImpl_ = this; }
 // Stop the echo check thread loop
@@ -156,42 +157,53 @@ void dataEchoImpl::Trig() {
 }
 
 void dataEchoImpl::buzzerStart() {
-  // Some buzzers/relays are active-low, so set LOW
+  // Some buzzers relays are active-low, so set LOW
   setOutputLow(chip, &bing_gpio_);
   gpiod_line_release(bing_gpio_.line);
-  printf("up\r\n");
+  // printf("up\r\n");
 }
 
 void dataEchoImpl::buzzerEnd() {
   // Deactivate the buzzer by setting line HIGH
   setOutputHight(chip, &bing_gpio_);
   gpiod_line_release(bing_gpio_.line);
-  printf("down \r\n");
+  // printf("down \r\n");
 }
 
 void echoEventInterFace::hasEvent(dataEchoImpl::echo_event &e) {
   switch (e.event.event_type) {
     case GPIOD_LINE_EVENT_FALLING_EDGE: {
       if (echo_end_flag) {
-        echo_end_flag = false; //End of the pulse detected
-        printf("triger, distance : %d\r\n", distance);
+        echo_end_flag = false;               //End of the pulse detected
+        // distance was built while echo was HIGH
        
-        echo_trig_flag = false; // Reset the trigger flag so the sensor can fire again
+        echo_trig_flag = false;              // Reset the trigger flag
         
-        //Example logic to activate buzzer if too close,
-        // if (distance <= 10) {
-        //   if (dataEchoImpl_) dataEchoImpl_->buzzerStart();
-        // } else {
-        //   if (dataEchoImpl_) dataEchoImpl_->buzzerEnd();
-        // }
-        
-        distance = 0;
-        sleep(1);
+        if (distance <= 10) {
+          distance_count++;
+          if (distance_count >= 10) {        // when the 10 hit alarm
+            printf("stranger is out\r\n");
+            dataEchoImpl_->buzzerStart();    //sound alarm
+         
+            if (start_catch_picture_flag) {  // one-shot camera
+              start_catch_picture_flag = false;
+              lcy::mutex_event_with_param e;
+              e.event_type = ECHO_DISTANCE_DANGER_EVENT;
+              dataEchoImpl_->eventLoop(e);
+            }
+          }
+        } else {                             // safe distance
+          start_catch_picture_flag = true;
+          distance_count = 0;
+          dataEchoImpl_->buzzerEnd();        // silence buzzer
+        }
+        distance = 0;                        // clear pulse
+        sleep(1);                            // tiny delay
       }
     } break;
     case GPIOD_LINE_EVENT_RISING_EDGE: {
-      echo_end_flag = true; //Begin of the pulse
-      distance++; // Increment the distance counter
+      echo_end_flag = true;                  //Begin of the pulse
+      distance++;                            // Increment the distance counter
       usleep(2);
     } break;
 
