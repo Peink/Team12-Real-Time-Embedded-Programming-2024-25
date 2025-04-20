@@ -2,7 +2,6 @@
 
 #include <unordered_map>
 
-// Define baud rate mapping table
 std::unordered_map<int, speed_t> speedMp = {
     {115200, B115200},
     {57600, B57600},
@@ -16,7 +15,6 @@ bool SerialTermios::serialOpen() {
     return false;
   }
 
-// Configure serial port parameters
   if (configurePort()) {
     isOpen_ = true;
     printf("serial configure success : %s\r\n", portname_.c_str());
@@ -27,7 +25,6 @@ bool SerialTermios::serialOpen() {
   }
 }
 
-// Turn off the serial port function
 void SerialTermios::serialClose() {
   if (fd_ >= 0) {
     close(fd_);
@@ -35,7 +32,6 @@ void SerialTermios::serialClose() {
   }
 }
 
-// Serial port configuration function
 bool SerialTermios::configurePort() {
   struct termios tty;
   memset(&tty, 0, sizeof tty);
@@ -55,7 +51,6 @@ bool SerialTermios::configurePort() {
   cfsetospeed(&tty, baudrate_b_);
   cfsetispeed(&tty, baudrate_b_);
 
-// Set the control mode
   tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;  // 8-bit chars
   tty.c_iflag &= ~IGNBRK;                      // disable break processing
   tty.c_lflag = 0;                             // no signaling chars, no echo,
@@ -81,7 +76,6 @@ bool SerialTermios::configurePort() {
   return true;
 }
 
-// Send data
 ssize_t SerialTermios::sendData(const char* buffer, ssize_t buffer_len) {
   ssize_t len = write(fd_, buffer, buffer_len);
   if (len < 0) {
@@ -93,7 +87,6 @@ ssize_t SerialTermios::sendData(const char* buffer, ssize_t buffer_len) {
   return len;
 }
 
-// Receive data
 ssize_t SerialTermios::receiveData(char* buffer, ssize_t max_len) {
   memset(buffer, 0, max_len);
   ssize_t len = read(fd_, buffer, max_len);
