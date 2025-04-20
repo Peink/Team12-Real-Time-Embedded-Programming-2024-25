@@ -43,6 +43,8 @@ void dataFingerImpl::onInit() {
   serialDataCheckThread_ =
       std::make_shared<std::thread>(&dataFingerImpl::serialDataCheckRun_, this);
   serialDataCheckThread_->detach();
+
+  fingerPrint_.deviceCheck();
 }
 
 void dataFingerImpl::hasEventCallback(lcy::mutex_event_with_param& e) {
@@ -55,6 +57,12 @@ void dataFingerImpl::hasEventCallback(lcy::mutex_event_with_param& e) {
         printf("finger receive press num : %d\r\n", press_num);
         if (press_num == ADD_NUM) {
           fingerPrint_.Add_FR();
+        }else if(press_num == VERIFICATION_NUM)
+        {
+          fingerPrint_.press_FR();
+        }else if(press_num == DELETE_NUM)
+        {
+
         }
       }
     } break;
@@ -88,3 +96,4 @@ void dataFingerImpl::serialEvent(serial_with_params_event& e) {
   for (auto& cb : adsCallbackInterfaces) {
     cb->hasEvent(e);
   }
+}
