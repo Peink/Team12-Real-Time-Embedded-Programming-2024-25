@@ -31,11 +31,15 @@ class fingerEventInterFace
   fingerEventInterFace();
   ~fingerEventInterFace() = default;
 
-  void hasEvent(dataFingerImpl::serial_with_params_event &e) override;
+ void hasEvent(dataFingerImpl::serial_with_params_event &e) override;
 
-  void Add_FR(void);       // Add fingerprint
-  void press_FR(void);     // Verify fingerprint
-  void Del_FR(void);       // Delete fingerprint
+  void deviceCheck(void);
+
+  bool Add_FR(void);
+
+  bool press_FR(void);
+
+  bool Del_FR(void);
 
   void setUARTSendData(void (*UartSendData)(const char *, uint16_t)) {
     UartSendData_ = UartSendData;
@@ -83,7 +87,10 @@ class fingerEventInterFace
   const char *EnsureMessage(u8 ensure);  // Interpret confirmation code
 
   void ShowErrMessage(u8 ensure);  // Display error message
+
+  u8 finger_num = 0;
 };
+
 
 #endif
 
