@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -g -g -shared -Wl,-soname,libserial.so -o libserial.so CMakeFiles/serial.dir/serialInterface.cpp.o CMakeFiles/serial.dir/serialTermios.cpp.o   -L/home/newcoder/embedded-project-door-lock/mutex/lib  -Wl,-rpath,/home/newcoder/embedded-project-door-lock/mutex/lib: -lrt -ldl -lpthread -lgpiod 
