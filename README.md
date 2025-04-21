@@ -26,7 +26,7 @@ ENG5220: Real Time Embedded Programming (2024-25) Group 12 Project
 ---
 
 ## 🚀 Project Overview  
-A multi-factor authentication smart lock system combining **facial recognition**, **fingerprint scanning**, and **password verification** for enhanced security. Integrated with remote monitoring, data logging, and real-time alarms, this system is designed for versatile applications in home, office, and industrial environments.  
+A multi-factor authentication smart lock system combining **Live video streaming**, **fingerprint scanning**, and **password verification** for enhanced security. Integrated with remote monitoring, data logging, and real-time alarms, this system is designed for versatile applications in home, office, and industrial environments.  
 
 **Developed using:** C++, Raspberry Pi GPIO, LAN-based communication，[OpenCV](https://opencv.org), etc.
 
@@ -35,7 +35,7 @@ A multi-factor authentication smart lock system combining **facial recognition**
 ## 🌟 Key Features
  
 ### 🔒 Authentication Methods  
-- **Facial Recognition**  
+- **Live video streaming**  
   - Infrared distance camera module for accurate detection and monite remote environment.
 - **Fingerprint Lock**  
   - Fingerprint sensor module for biometric verification.  
@@ -55,7 +55,7 @@ A multi-factor authentication smart lock system combining **facial recognition**
 
 ### 🖥️ Sensors, Hardware & Software  
 - **Sensors**: Infrared camera, fingerprint sensor, matrix buttons.  
-- **Actuators**: Buzzer, motor control.  
+- **Actuators**: Buzzer.  
 - **Software**: Real-time embedded programming for multi-factor authentication and data handling.  
 
 ---
@@ -70,7 +70,6 @@ A multi-factor authentication smart lock system combining **facial recognition**
 
 ### **Software Components**
 - **Multithreading System**: Manages events in real-time
-- **Client Applications or website (LAN-Based)**: Receives alerts and displays monitoring data
 
 
 ## ✨ Practicality & Innovation  
@@ -92,12 +91,12 @@ A multi-factor authentication smart lock system combining **facial recognition**
 3. Event handlers perform multiple tasks:
    - **Display alert messages on screen**
    - **Trigger a buzzer alarm**
-   - **Send alerts to LAN-connected client applications**
    - **Start live video surveillance (if enabled)**
-4. Users can remotely monitor sensor readings and alerts via LAN-connected apps.
-5. The system operates autonomously with minimal latency
+4. The system operates autonomously with minimal latency
+---
 
 ## 📦 System Architecture
+![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/b53808e9a5147778e73d4eec3dc0ec9753393fea/Project%20Ducument/pic/%E5%9B%BE%E7%89%871.png)
 
 The core framework utilizes **dynamic library loading** to implement overall functionality in a modular and scalable way.  
 All modules inherit from the `mutexNode` base class, including:
@@ -128,7 +127,7 @@ Once data is captured, the `eventLoop` method of `mutexNode` is called, which se
 - The `keyboard` module detects a button press and triggers a fingerprint check via the `finger` module.
 - When the ultrasonic sensor detects that an object is too close, it forwards the event through `eventLoop` to the `camera` module.
 - The `camera` module then notifies the Qt-based UI to save the current frame for security monitoring.
-
+- The data from `camera`  communicates with `aiView` compiled by QT through the "Publish-Subscribe" model of the zmq multithreaded network library, generating `aiView_Data`, to show video stream or capture image in certain cage.
 ---
 
 ## 🛠️ Download & Installation
@@ -158,16 +157,24 @@ sudo make clean       # Remove all build files
 ## 🚀 Features
 
 - **Lock-free architecture** — No thread mutex, enabling safe concurrency  
+
 - **Real-time video surveillance & anti-intrusion alerts**  
-- **Modular, decoupled build & runtime framework** — Easy to scale and maintain  
+
+- **Modular, decoupled build & runtime framework** — Easy to scale and maintain 
+
 - **Dynamic library system** — Enables hot-swappable updates and simplified integration  
 
+- **Audio set intergration** —  providing convenient feedback
 
 ---
-## 📦 The Structure of Project
-![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/Project-Document/Project%20Ducument/pic/Structure%20.svg)
----
 ## ⌚️ The Project Plan
+
+**04.21.2025-The project work schedule (after feedback)**
+
+<div align="center">
+<img alt="LOGO" src="https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/94cf7f30b96a363e7807d969abe0b878aa140fb1/Project%20Ducument/pic/project%20work.PNG"/>
+</div>   
+
 **It is subject to the actual process and will be updated later**
 
 <div align="center">
@@ -175,5 +182,14 @@ sudo make clean       # Remove all build files
 </div>   
 
 
-🌟 **Thank you for your interest!**  
+##  Possible future expansion
 
+- Self-starting script
+- Bluetooth module and mobile app
+- Coding Optimization and improve logic 
+
+
+##  📞 Contact & Social Media
+📧 Email: rtep.t12.2025@gmail.com 💼 Instagram: @uogrtep.t12.2025 🌎 Github: [https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25.git/]
+
+🌟 **Thank you for your interest!**  
