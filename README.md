@@ -96,6 +96,73 @@ A multi-factor authentication smart lock system combining **facial recognition**
    - **Start live video surveillance (if enabled)**
 4. Users can remotely monitor sensor readings and alerts via LAN-connected apps.
 5. The system operates autonomously with minimal latency
+
+## 📦 System Architecture
+
+The core framework utilizes **dynamic library loading** to implement overall functionality in a modular and scalable way.  
+All modules inherit from the `mutexNode` base class, including:
+
+- `keyboard` — Key detection and password handling module  
+- `Echo` — Ultrasonic sensor and buzzer management module  
+- `finger` — Fingerprint recognition module  
+- `camera` — Camera capture and monitoring module  
+- `serial` — Serial communication module
+
+---
+
+## 🔁 Event & Callback System
+
+Callbacks are used both in the main runtime framework and within each module.
+
+Each module registers its internal events via the `eventInterface`. These events are monitored using the `hasEvent` method. When an event is detected (e.g., GPIO input, serial data reception, ultrasonic distance measurement), a corresponding callback is triggered to handle the logic.
+
+For example:
+- A GPIO pin detects a key press
+- A fingerprint is recognized
+- An object is detected nearby via ultrasonic
+
+Once data is captured, the `eventLoop` method of `mutexNode` is called, which sequentially invokes the `hasEventCallback` interface of each module to handle events accordingly.
+
+### 🔄 Cross-Module Interaction
+
+- The `keyboard` module detects a button press and triggers a fingerprint check via the `finger` module.
+- When the ultrasonic sensor detects that an object is too close, it forwards the event through `eventLoop` to the `camera` module.
+- The `camera` module then notifies the Qt-based UI to save the current frame for security monitoring.
+
+---
+
+## 🛠️ Download & Installation
+
+```bash
+git clone https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25.git
+
+sudo make depends     # Download dependencies  
+sudo make arm         # Compile for ARM architecture  
+sudo make install     # Install the compiled binaries  
+sudo make run         # Run the main system
+```
+
+> ⚠️ `aiView` must be started manually:  
+> Navigate to `~/aiView/build/` and run `./aiView.exe`
+
+---
+
+## ❌ Uninstallation
+
+```bash
+sudo make clean       # Remove all build files
+```
+
+---
+
+## 🚀 Features
+
+- **Lock-free architecture** — No thread mutex, enabling safe concurrency  
+- **Real-time video surveillance & anti-intrusion alerts**  
+- **Modular, decoupled build & runtime framework** — Easy to scale and maintain  
+- **Dynamic library system** — Enables hot-swappable updates and simplified integration  
+
+
 ---
 ## 📦 The Structure of Project
 ![image](https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25/blob/Project-Document/Project%20Ducument/pic/Structure%20.svg)
