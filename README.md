@@ -190,6 +190,9 @@ sudo make clean       # Remove all build files
 
 
 ##  📞 Contact & Social Media
-📧 Email: rtep.t12.2025@gmail.com 💼 Instagram: @uogrtep.t12.2025 🌎 Github: [https://github.com/Peink/Team12-Real-Time-Embedded-Programming-2024-25.git/]
+📧 Email: rtep.t12.2025@gmail.com 
+
+💼 Instagram: [uogrtep.t12.2025](https://www.instagram.com/uogrtep.t12.2025/) 
+
 
 🌟 **Thank you for your interest!**  
