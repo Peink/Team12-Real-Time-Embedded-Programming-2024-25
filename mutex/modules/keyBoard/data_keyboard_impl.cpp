@@ -1,11 +1,39 @@
 #include "data_keyboard_impl.hpp"
 
+#define ADD_NUM 13
+#define DELETE_NUM 14
+#define VERIFICATION_NUM 15
+
 static std::vector<std::vector<int>> press_num =
     std::vector<std::vector<int>>(28, std::vector<int>(28, -1));
 
 static keyBoardEventInterFace keyboard_;
 
-dataKeyBoardImpl::dataKeyBoardImpl() {}
+dataKeyBoardImpl::dataKeyBoardImpl() {
+  char password_file_path[2048] = {0};
+  memset(password_file_path, 0, 2048);
+  snprintf(password_file_path, 2048, "%s%s", HOME_PREFIX, PASSWORD_PATH);
+  std::ifstream password_file = std::ifstream(password_file_path);
+  if (!password_file.is_open()) {
+    printf("no password\r\n");
+    password_save = std::vector<int>(6, 0);
+  } else {
+    std::string read_line;
+    if (std::getline(password_file, read_line)) {
+      printf("read password success\r\n");
+      if (read_line.size() < 6) {
+        printf("password error\r\n");
+        password_save = std::vector<int>(6, 0);
+      } else {
+        for (int i = 0; i < 6; i++) {
+          password_save.push_back(read_line[i] - '0');
+        }
+      }
+    } else {
+      password_save = std::vector<int>(6, 0);
+    }
+  }
+}
 
 dataKeyBoardImpl::~dataKeyBoardImpl() {
   checkKeyBoardRunFlag_ = false;
@@ -29,12 +57,12 @@ void dataKeyBoardImpl::setOutputHight(gpiod_chip *chip, gpio_t *gpio_) {
     printf("Get line failed\n");
   }
 
-  // 请求GPIO线为输出模式
+  // Request the GPIO line to be in output mode
   if (gpiod_line_request_output(gpio_->line, CONSUMER, 0) < 0) {
     perror("Failed to request GPIO line as output");
   }
 
-  // 将GPIO线设置为高电平
+  // Set the GPIO line to high level
   if (gpiod_line_set_value(gpio_->line, 1) < 0) {
     perror("Failed to set GPIO line to high");
   }
@@ -89,22 +117,22 @@ void dataKeyBoardImpl::onInit() {
   press_num[17][24] = 1;
   press_num[27][24] = 2;
   press_num[22][24] = 3;
-  press_num[18][24] = 4;
+  press_num[18][24] = 12;
 
-  press_num[17][23] = 5;
-  press_num[27][23] = 6;
-  press_num[22][23] = 7;
-  press_num[18][23] = 8;
+  press_num[17][23] = 4;
+  press_num[27][23] = 5;
+  press_num[22][23] = 6;
+  press_num[18][23] = 13;
 
-  press_num[17][11] = 9;
-  press_num[27][11] = 10;
-  press_num[22][11] = 11;
-  press_num[18][11] = 12;
+  press_num[17][11] = 7;
+  press_num[27][11] = 8;
+  press_num[22][11] = 9;
+  press_num[18][11] = 14;
 
-  press_num[17][26] = 13;
-  press_num[27][26] = 14;
-  press_num[22][26] = 15;
-  press_num[18][26] = 16;
+  press_num[17][26] = 10;
+  press_num[27][26] = 0;
+  press_num[22][26] = 11;
+  press_num[18][26] = 15;
 
   chip = gpiod_chip_open_by_name(chipname);
   if (!chip) {
@@ -121,7 +149,124 @@ void dataKeyBoardImpl::onInit() {
   keyBoardCheckThread_->detach();
 }
 
-void dataKeyBoardImpl::hasEventCallback(lcy::mutex_event_with_param &e) {}
+void dataKeyBoardImpl::hasEventCallback(lcy::mutex_event_with_param &e) {
+  switch (e.event_type) {
+    case KEY_PRESS_EVENT: {
+      if (e.param == nullptr) {
+        return;
+      } else {
+        int press_num = *(static_cast<int *>(e.param));
+        printf("keyboard receive press num : %d\r\n", press_num);
+        if (press_num == CONFIRM_NUM) {
+          if (modify_password_flag == 2) {
+            modify_password_flag = 3;
+            printf("please input password again\r\n");
+            playVideo("6.wav");
+          } else {
+            if (modify_password_flag == 3) {
+              for (int i = 0; i < 6; i++) {
+                if (password_new[i] != password_new_again[i]) {
+                  printf("inconsistent password\r\n");
+                  playVideo("8.wav");
+                  password_clear();
+                  return;
+                }
+              }
+              printf("modify password success\r\n");
+              playVideo("7.wav");
+              char password_file_path[2048] = {0};
+              memset(password_file_path, 0, 2048);
+              snprintf(password_file_path, 2048, "%s%s", HOME_PREFIX,
+                       PASSWORD_PATH);
+              std::ofstream password_file = std::ofstream(password_file_path);
+              for (int i = 0; i < 6; i++) {
+                char s[1] = {0};
+                s[0] = password_new[i] + '0';
+                password_file.write(s, 1);
+              }
+              password_save = password_new;
+              password_clear();
+              return;
+            } else {
+              for (int i = 0; i < 6; i++) {
+                if (password_vec[i] != password_save[i]) {
+                  printf("password is error \r\n");
+                  playVideo("2.wav");
+                  password_clear();
+                  return;
+                }
+              }
+              printf("password is right\r\n");
+              playVideo("1.wav");
+              if (modify_password_flag == 1) {
+                password_clear();
+                modify_password_flag = 2;
+                printf("please input new password\r\n");
+                playVideo("5.wav");
+              }else if(modify_password_flag == 10){
+                printf("start add finger\r\n");
+                password_clear();
+                lcy::mutex_event_with_param e;
+                e.event_type = ADD_FINGER_EVENT;
+                eventLoop(e);
+                return;
+              }else if(modify_password_flag == 11) {
+                printf("start delete finger\r\n");
+                password_clear();
+                lcy::mutex_event_with_param e;
+                e.event_type = DELETE_FINGER_EVENT;
+                eventLoop(e);
+              }else if(modify_password_flag == 12) {
+                printf("start verification finger\r\n");
+                password_clear();
+                lcy::mutex_event_with_param e;
+                e.event_type = VERIFICATION_FINGER_EVENT;
+                eventLoop(e);
+              }
+              else {
+                password_clear();
+              }
+            }
+          }
+        } else if (press_num == CANCEL_NUM) {
+          password_clear();
+          printf("password verifiy is cancel\r\n");
+          playVideo("3.wav");
+        } else if (press_num == MODIFY_NUM) {
+          printf("start modify, please input right password\r\n");
+          playVideo("4.wav");
+          password_clear();
+          modify_password_flag = 1;
+        }else if (press_num == ADD_NUM){
+          printf("Before add finger, please verify password\r\n");
+          modify_password_flag = 10;
+          playVideo("4.wav");
+        }else if (press_num == DELETE_NUM){
+          printf("Before delete finger, please verify password \r\n");
+          modify_password_flag = 11;
+          playVideo("4.wav");
+        }else {
+          if (press_num == 10) press_num = 0;
+          if (modify_password_flag == 2) {
+            if (password_new.size() < 6) password_new.push_back(press_num);
+          } else if (modify_password_flag == 3) {
+            if (password_new_again.size() < 6)
+              password_new_again.push_back(press_num);
+          } else {
+            if (password_vec.size() == 6) {
+              printf("password is full\r\n");
+              password_vec.clear();
+            }
+            password_vec.push_back(press_num);
+          }
+        }
+      }
+    } break;
+
+    default:
+      break;
+  }
+}
 
 void dataKeyBoardImpl::start() {
   while (checkKeyBoardRunFlag_) {
@@ -173,6 +318,13 @@ void dataKeyBoardImpl::keyBoardEvent(keyboard_event_with_params &e) {
   for (auto &cb : adsCallbackInterfaces) {
     cb->hasEvent(e);
   }
+}
+
+void dataKeyBoardImpl::password_clear() {
+  password_vec.clear();
+  password_new.clear();
+  password_new_again.clear();
+  modify_password_flag = 0;
 }
 
 keyBoardEventInterFace::keyBoardEventInterFace() {}

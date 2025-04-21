@@ -33,8 +33,7 @@
 #define MODIFY_NUM 12
 
 #define CHIP_NAME "gpiochip0"
-
-#define PASSWORD_PATH "/home/newcoder/project/mutex/password.txt"
+#define PASSWORD_PATH "password.txt"
 
 typedef struct {
   int last_num;

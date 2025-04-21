@@ -3,9 +3,7 @@
 #include "fingerlib/finger.hpp"
 #include "serialTermios.hpp"
 
-#define ADD_NUM 16
-#define DELETE_NUM 15
-#define VERIFICATION_NUM 14
+#define VERIFICATION_NUM 15
 
 static dataFingerImpl* this_ = nullptr;
 
@@ -55,18 +53,38 @@ void dataFingerImpl::hasEventCallback(lcy::mutex_event_with_param& e) {
       } else {
         int press_num = *(static_cast<int*>(e.param));
         printf("finger receive press num : %d\r\n", press_num);
-        if (press_num == ADD_NUM) {
-          fingerPrint_.Add_FR();
-        }else if(press_num == VERIFICATION_NUM)
-        {
-          fingerPrint_.press_FR();
-        }else if(press_num == DELETE_NUM)
-        {
-
+        if (press_num == VERIFICATION_NUM) {
+          printf("please press finger\r\n");
+          if (fingerPrint_.press_FR()) {
+            printf("verify finger success\r\n");
+            playVideo("11.wav");
+          } else {
+            printf("verify finger failed\r\n");
+            playVideo("12.wav");
+          }
         }
       }
     } break;
 
+    case ADD_FINGER_EVENT:{
+      if (fingerPrint_.Add_FR()) {
+        printf("add finger success \r\n");
+        playVideo("13.wav");
+      } else {
+        printf("add finger failed \r\n");
+        playVideo("14.wav");
+      }
+    }break;
+
+    case DELETE_FINGER_EVENT:{
+      if (fingerPrint_.Del_FR()) {
+        printf("delete finger success \r\n");
+        playVideo("15.wav");
+      } else {
+        printf("delete finger failed \r\n");
+        playVideo("16.wav");
+      }
+    }break;
     default:
       break;
   }

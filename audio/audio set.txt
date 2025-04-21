@@ -1,0 +1,16 @@
+1-Pass word accepted
+2-Incorrect password
+3-Cancelled
+4-Enter current password
+5-Enter new password
+6-Re-enter new password
+7-Password changed
+8-Password do not match
+9-Invalid input
+10-Place your finger
+11-Fingerprint verified
+12-Finger print verification failed
+13-Finger print added
+14-Finger print added failed
+15-Finger print deleted
+16-Finger print deleted failed

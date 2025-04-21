@@ -39,11 +39,43 @@ project_build() {
 }
 
 ### --------------------------------------------------------------------
+### Depends
+### --------------------------------------------------------------------
+project_depends() {
+    sudo apt-get install -y libgpiod-dev libzmq3-dev libopencv-dev qtbase5-dev qttools5-dev-tools
+}
+
+### --------------------------------------------------------------------
+### Run
+### --------------------------------------------------------------------
+project_run() {
+    sudo mutex
+}
+
+### --------------------------------------------------------------------
+### Install
+### --------------------------------------------------------------------
+project_install() {
+    sudo cp -rf ./lib/3rd/arm/lib* /usr/lib
+    sudo cp -rf ./lib/product/arm/lib* /usr/lib
+    sudo cp -rf ./lib/product/arm/bin/mutex /usr/bin
+}
+
+### --------------------------------------------------------------------
 ### Scirpt params
 ### --------------------------------------------------------------------
 case "$1" in
 arm)
     project_build $1
+    ;;
+install)
+    project_install
+    ;;
+run)
+    project_run
+    ;;
+depends)
+    project_depends
     ;;
 *)
     usage

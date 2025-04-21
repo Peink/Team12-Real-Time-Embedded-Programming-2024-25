@@ -13,9 +13,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(BUILD_PLATFORM arm)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/include/
+    ${CMAKE_SOURCE_DIR}/include/
     ${CMAKE_SOURCE_DIR}/
     ${CMAKE_BINARY_DIR}/
+    /usr/include/opencv4
 )
 
 link_directories(

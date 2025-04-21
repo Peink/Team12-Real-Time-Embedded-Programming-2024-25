@@ -4,9 +4,13 @@
 #include <error.h>
 #include <gpiod.h>
 
+#include <cstring>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
+
+#define HOME_PREFIX "/home/team12/embedded-project-door-lock/"
 
 typedef struct {
   unsigned int line_num;
@@ -17,6 +21,10 @@ typedef struct {
 enum {
   NULL_EVENT,
   KEY_PRESS_EVENT,
+  ECHO_DISTANCE_DANGER_EVENT,
+  ADD_FINGER_EVENT,
+  VERIFICATION_FINGER_EVENT,
+  DELETE_FINGER_EVENT,
 };
 
 namespace lcy {
@@ -56,6 +64,19 @@ class mutexNode {
   virtual void hasEventCallback(mutex_event_with_param& e) = 0;
 
   std::vector<std::shared_ptr<mutexNode>>* nodeCallbackInterfaceList = nullptr;
+
+  char play_order[2048];
+
+  void playVideo(const char* file) {
+    memset(play_order, 0, 2048);
+    snprintf(play_order, 2048, "aplay %s%s%s", HOME_PREFIX, "audio/",file);
+    int result = system(play_order);
+    if (result == 0) {
+      // std::cout << "Script executed successfully." << std::endl;
+    } else {
+      std::cerr << "Script execution failed with code: " << result << std::endl;
+    }
+  }
 
  private:
 };

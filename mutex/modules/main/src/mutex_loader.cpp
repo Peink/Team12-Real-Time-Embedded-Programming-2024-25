@@ -10,7 +10,7 @@
 
 namespace lcy {
 
-std::vector<std::string> node_list = {"finger", "keyBoard", "echo"};
+std::vector<std::string> node_list = {"finger", "keyBoard", "echo", "camera"};
 
 mutexLoader::mutexLoader() {}
 

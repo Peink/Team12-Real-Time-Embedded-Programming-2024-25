@@ -78,6 +78,8 @@ class echoEventInterFace : public dataEchoImpl::EchoEventCallbackInterface {
   ~echoEventInterFace() = default;
 
   void hasEvent(dataEchoImpl::echo_event &e) override;
+
+  bool start_catch_picture_flag = true;
 };
 
 #endif

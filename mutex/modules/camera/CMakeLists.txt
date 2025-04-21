@@ -1,4 +1,4 @@
-project(mutex)
+project(camera)
 
 set(CMAKE_CXX_STANDARD 17)
 add_definitions(-Wall)
@@ -20,28 +20,31 @@ file(GLOB_RECURSE CPP_FILES "${CMAKE_CURRENT_LIST_DIR}/*.cpp")
 
 set(COMPILE_FILES ${H_FILES} ${C_FILES} ${CC_FILES} ${CPP_FILES})
 
-
 ### --------------------------------------------------------------------
 ### Generate lib
 ### --------------------------------------------------------------------
-add_executable(mutex ${COMPILE_FILES})
+add_library(${PROJECT_NAME} SHARED ${COMPILE_FILES})
+
+add_definitions(-DUSE_ARM)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/src
+        /usr/include/opencv4
 )
 
-if(${BUILD_PLATFORM} STREQUAL "arm")
-        target_compile_definitions(${PROJECT_NAME} PRIVATE -DSPDLOG_FMT_EXTERNAL)
-        # target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wno-long-long -pedantic -Werror)
-endif()
+target_link_directories(${PROJECT_NAME} PRIVATE)
 
-target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/lib/3rd/${BUILD_PLATFORM}  ${CMAKE_SOURCE_DIR}/lib/product/${BUILD_PLATFORM})
+set(LIB_COMMON zmq opencv_core opencv_imgproc opencv_imgcodecs rt pthread)
 
-target_link_libraries(${PROJECT_NAME} rt dl pthread gpiod echo keyBoard serial finger camera)
+set(LIB_ARM ${LIB_COMMON})
+
+target_link_libraries(${PROJECT_NAME} ${LIB_ARM})
 
 install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/lib/product/${BUILD_PLATFORM}/bin
+        ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/lib/product/${BUILD_PLATFORM}/
+        LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/lib/product/${BUILD_PLATFORM}/
+        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/lib/product/
         )
 
 
