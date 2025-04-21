@@ -25,6 +25,13 @@ ENG5220: Real Time Embedded Programming (2024-25) Group 12 Project
 
 ---
 
+
+[![Electronic eyehole Test](https://gla.sharepoint.com/:v:/s/Team12embed/Efn9q0gLo2hHtdTox-Vc42sBQXBsfVSCZ935i_Xi4kVjMw?e=XoLdKh)](https://gla.sharepoint.com/:v:/s/Team12embed/Efn9q0gLo2hHtdTox-Vc42sBQXBsfVSCZ935i_Xi4kVjMw?e=XoLdKh)
+
+[![Password and sound Test](https://gla.sharepoint.com/:v:/s/Team12embed/EZ6-cDBnWKlNrjk4eVybDdQBAM0sT-AKJN4pJcpkcV9qMg?e=FjfVgR)](https://gla.sharepoint.com/:v:/s/Team12embed/EZ6-cDBnWKlNrjk4eVybDdQBAM0sT-AKJN4pJcpkcV9qMg?e=FjfVgR)
+
+[![Fingerprint and Keyboard linkage Test 1](https://gla.sharepoint.com/:v:/s/Team12embed/ESTaQwF9EqxJqG_7_rHgMx0BXo_U7hnMptKHtLEKOL2NZA?e=Wd7M0G)](https://gla.sharepoint.com/:v:/s/Team12embed/ESTaQwF9EqxJqG_7_rHgMx0BXo_U7hnMptKHtLEKOL2NZA?e=Wd7M0G)
+
 ## 🚀 Project Overview  
 A multi-factor authentication smart lock system combining **facial recognition**, **fingerprint scanning**, and **password verification** for enhanced security. Integrated with remote monitoring, data logging, and real-time alarms, this system is designed for versatile applications in home, office, and industrial environments.  
 
